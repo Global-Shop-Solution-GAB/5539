@@ -1,0 +1,660 @@
+Program.Sub.ScreenSU.Start
+Gui.Form..Create
+Gui.Form..Caption("EDI Parser")
+Gui.Form..Size(16410,10545)
+Gui.Form..MinX(0)
+Gui.Form..MinY(0)
+Gui.Form..Position(0,0)
+Gui.Form..BackColor(-2147483633)
+Gui.Form..MousePointer(0)
+Gui.Form..Event(UnLoad,Form_UnLoad)
+Gui.Form.lbl1.Create(Label,"Source",True,765,255,0,90,90,True,0,"Arial",8,-2147483633,0)
+Gui.Form.lbl2.Create(Label,"Destination",True,960,255,0,90,750,True,0,"Arial",8,-2147483633,0)
+Gui.Form.txtSourceFile.Create(TextBox,"",True,15135,300,0,90,300,True,0,"Arial",8,-2147483643,1)
+Gui.Form.txtSourceFile.Event(KeyPress,txtSourceFile_KeyPress)
+Gui.Form.txtTargetFile.Create(TextBox,"",True,15135,300,0,90,960,True,0,"Arial",8,-2147483643,1)
+Gui.Form.cmdBrowseSource.Create(Button)
+Gui.Form.cmdBrowseSource.Size(855,375)
+Gui.Form.cmdBrowseSource.Position(15330,255)
+Gui.Form.cmdBrowseSource.Caption("^")
+Gui.Form.cmdBrowseSource.Event(Click,cmdBrowseSource_Click)
+Gui.Form.cmdBrowseDestination.Create(Button)
+Gui.Form.cmdBrowseDestination.Size(855,375)
+Gui.Form.cmdBrowseDestination.Position(15330,930)
+Gui.Form.cmdBrowseDestination.Caption("^")
+Gui.Form.cmdBrowseDestination.Event(Click,cmdBrowseDestination_Click)
+Gui.Form.cmdSave.Create(Button)
+Gui.Form.cmdSave.Size(855,375)
+Gui.Form.cmdSave.Position(45,9585)
+Gui.Form.cmdSave.Caption("Save")
+Gui.Form.cmdSave.Event(Click,cmdSave_Click)
+Gui.Form.gsEDI.Create(GsGridControl)
+Gui.Form.gsEDI.Size(16065,7425)
+Gui.Form.gsEDI.Position(105,2040)
+Gui.Form.cmdParse.Create(Button)
+Gui.Form.cmdParse.Size(855,375)
+Gui.Form.cmdParse.Position(120,1470)
+Gui.Form.cmdParse.Caption("Parse")
+Gui.Form.cmdParse.Event(Click,cmdParse_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+v.Global.sDefaultProcessFolder.Declare
+v.Global.sSourceFile.Declare
+v.Global.sTargetFile.Declare
+v.Global.sSouceContent.Declare
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'BN May 20, 2019
+'This program will parse the EDI file, for each part in line item, will add its correspording Surcharge part as a line item right after its parent line
+
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sYesNo.Declare	
+	
+	F.Intrinsic.Control.If(V.Caller.Hook,=,32500)
+	
+		Function.Intrinsic.UI.MsgBox("Do you want to parse EDI file that adds Surcharges?","Surcharge Parser",4,v.Local.sYesNo)
+		'User say No
+		f.Intrinsic.Control.If(v.Local.sYesNo,=,7)
+			f.Intrinsic.Control.CallSub("Unload")
+		f.Intrinsic.Control.EndIf
+		
+		f.ODBC.Connection!conx.OpenCompanyConnection
+		'Part Description dictionary
+		f.Data.Dictionary.CreateFromSQL("PartDescDict","conx","Select ltrim(rtrim(Part)) + '-' + Location as PartLoc,Description from Inventory_mstr")
+		f.Data.Dictionary.SetDefaultReturn("PartDescDict","")
+		
+		f.Data.DataTable.Create("NewContent",True)
+		f.Data.DataTable.AddColumn("NewContent","PO","String","")
+		f.Data.DataTable.AddColumn("NewContent","Line","String","")
+		f.Data.DataTable.AddColumn("NewContent","Type","String","")
+		f.Data.DataTable.AddColumn("NewContent","Content","String","")
+		f.Data.DataTable.AddColumn("NewContent","Part","String","")
+		f.Data.DataTable.AddColumn("NewContent","Location","String","")
+		f.Data.DataTable.AddColumn("NewContent","Description","String","")
+		f.Data.DataTable.AddColumn("NewContent","CustomerPart","String","")
+		f.Data.DataTable.AddColumn("NewContent","CustomerDescription","String","")
+		f.Data.DataTable.AddColumn("NewContent","Qty","Float",0)
+		f.Data.DataTable.AddColumn("NewContent","CustomerPrice","String","")
+		f.Data.DataTable.AddColumn("NewContent","Price","Float",0)
+		f.Data.DataTable.AddColumn("NewContent","Extension","Float",0)
+		
+		f.Data.DataView.Create("NewContent","NewContentDV")		
+		gui.Form.gsEDI.AddGridviewFromDataview("GVMain","NewContent","NewContentDV")
+		
+		gui.Form..Show
+		
+	F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Main.End
+
+Program.Sub.UnLoad.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+
+	F.Intrinsic.Control.If(V.ODBC.conx.State,=,1)
+		F.ODBC.Connection!conx.close
+	F.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.End
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+Program.Sub.UnLoad.End
+
+Program.Sub.Form_UnLoad.Start
+f.Intrinsic.Control.CallSub("Unload")
+Program.Sub.Form_UnLoad.End
+
+Program.Sub.cmdBrowseSource_Click.Start
+'Browse Source file
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sFilePath.Declare
+	
+	F.Intrinsic.UI.ShowOpenFileDialog(V.Global.sDefaultProcessFolder,"*|*.*","",V.Local.sFilePath)
+	F.Intrinsic.Control.If(V.Local.sFilePath,=,"***CANCEL***")
+		F.Intrinsic.UI.Msgbox("No File Was Selected")
+		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.EndIf
+	gui.Form.txtSourceFile.Text(v.Local.sFilePath)
+	f.Intrinsic.Control.CallSub("txtSourceFile_KeyPress")
+	
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+
+Program.Sub.cmdBrowseSource_Click.End
+
+Program.Sub.cmdBrowseDestination_Click.Start
+'Browse Destination File
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sFilePath.Declare
+	
+	F.Intrinsic.UI.ShowOpenFileDialog(V.Global.sDefaultProcessFolder,"*|*.*","",V.Local.sFilePath)
+	F.Intrinsic.Control.If(V.Local.sFilePath,=,"***CANCEL***")
+		F.Intrinsic.UI.Msgbox("No File Was Selected")
+		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.EndIf
+	gui.Form.txtTargetFile.Text(v.Local.sFilePath)	
+	
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdBrowseDestination_Click.End
+
+Program.Sub.txtSourceFile_KeyPress.Start
+'Key press in Source File textbox will modify Target File textbox
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSourceFile.Declare
+	v.Local.sTargetFile.Declare
+	v.Local.sHold.Declare
+	v.Local.bExist.Declare
+		
+	v.Local.sSourceFile.Set(v.Screen.Form!txtSourceFile.Text.Trim)
+	f.Intrinsic.String.Split(v.Local.sSourceFile,".",v.Local.sHold)	
+	f.Intrinsic.String.Build("{0}_{1}_{2}",v.Local.sHold(0),v.Ambient.Now.FormatYYYYMMDD,v.Ambient.Now.FormatHHNNSS,v.Local.sTargetFile)
+	gui.Form.txtTargetFile.Text(v.Local.sTargetFile)
+	
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.txtSourceFile_KeyPress.End
+
+Program.Sub.cmdParse_Click.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.bExist.Declare
+	v.Local.sSourceFile.Declare
+	
+	
+	v.Local.sSourceFile.Set(v.Screen.Form!txtSourceFile.Text.Trim)
+	'Double check if file exists
+	f.Intrinsic.File.Exists(v.Local.sSourceFile,v.Local.bExist)
+	f.Intrinsic.Control.If(v.Local.bExist.Not)
+		gui.Form.gsEDI.ClearRows("GVMain")
+		f.Intrinsic.Control.If(v.DataTable.EDI.Exists)
+			f.Data.DataTable.Close("EDI")
+		f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.If(v.DataTable.StagingContent.Exists)
+			f.Data.DataTable.Close("StagingContent")
+		f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.If(v.DataTable.Lines.Exists)
+			f.Data.DataTable.Close("Lines")
+		f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.If(v.DataTable.Surcharges.Exists)
+			f.Data.DataTable.Close("Surcharges")
+		f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.If(v.DataTable.NewContent.Exists)
+			f.Data.DataTable.Close("NewContent")
+		f.Intrinsic.Control.EndIf	
+		gui.Form.gsEDI.ClearRows("GVMain")
+		f.Intrinsic.UI.Msgbox("File does not exist.","Attention")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.CallSub("Parse_file","sSourceFile",v.Local.sSourceFile)	
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdParse_Click.End
+
+Program.Sub.Parse_File.Start
+'Key press in Source File textbox will modify Target File textbox
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	v.Local.sOrigLine.Declare
+	'See EDI Inbound 85a File Structure
+	v.Local.iPositionH.Declare
+	v.Local.iPositionA.Declare
+	v.Local.iPositionB.Declare
+	v.Local.iPositionC.Declare
+	v.Local.iPositionN.Declare
+	v.Local.iPosition1.Declare
+	v.Local.iPosition2.Declare
+	v.Local.iPositionM.Declare
+	v.Local.sContent.Declare
+	v.Local.sType.Declare
+	
+	v.Local.iLen1.Declare
+	
+	v.Local.iCnt.Declare
+	
+	v.Local.fQty.Declare
+	
+	v.Local.sCustomer.Declare
+	v.Local.sCustomerPart.Declare
+	v.Local.sCustomerDescription.Declare
+	v.Local.fCustomerPrice.Declare
+	
+	v.Local.sPart.Declare
+	v.Local.sDescription.Declare
+	v.Local.fPrice.Declare
+	v.Local.fExtention.Declare
+	v.Local.sLocation.Declare
+	v.Local.sHold.Declare
+	v.Local.sSurcharge.Declare	
+	v.Local.sSurchargeDescription.Declare
+	v.Local.sRet.Declare
+	v.Local.sLineNum.Declare
+	v.Local.iLineNum.Declare
+	v.Local.iFirstLine.Declare
+	v.Local.sFilter.Declare
+	v.Local.iInner.Declare
+	v.Local.sChangeOrder.Declare
+	v.Local.iNewLineNum.Declare
+	v.Local.sNewLineNum.Declare
+	v.Local.iRef.Declare
+	v.Local.sPO.Declare
+	v.Local.iOuter.Declare
+				
+	f.Intrinsic.Control.If(v.DataTable.EDI.Exists)
+		f.Data.DataTable.Close("EDI")
+	f.Intrinsic.Control.EndIf
+	f.Data.DataTable.Create("EDI",True)
+	f.Data.DataTable.AddColumn("EDI","PO","String","")
+	f.Data.DataTable.AddColumn("EDI","Line","String","")
+	f.Data.DataTable.AddColumn("EDI","Type","String","")
+	f.Data.DataTable.AddColumn("EDI","Flag","String","")
+	f.Data.DataTable.AddColumn("EDI","Part","String","")
+	f.Data.DataTable.AddColumn("EDI","Location","String","")
+	f.Data.DataTable.AddColumn("EDI","Description","string","")
+	f.Data.DataTable.AddColumn("EDI","CustomerPart","String","")
+	f.Data.DataTable.AddColumn("EDI","CustomerDescription","String","")	
+	f.Data.DataTable.AddColumn("EDI","Qty","float",0)
+	f.Data.DataTable.AddColumn("EDI","CustomerPrice","float",0)	
+	f.Data.DataTable.AddColumn("EDI","Price","float",0)
+	f.Data.DataTable.AddColumn("EDI","Extension","float",0)
+	
+	f.Intrinsic.Control.If(v.DataTable.StagingContent.Exists)
+		f.Data.DataTable.Close("StagingContent")
+	f.Intrinsic.Control.EndIf
+	f.Data.DataTable.Create("StagingContent",True)
+	f.Data.DataTable.AddColumn("StagingContent","PO","String","")
+	f.Data.DataTable.AddColumn("StagingContent","Line","String","")
+	f.Data.DataTable.AddColumn("StagingContent","Content","String","")
+	f.Data.DataView.Create("StagingContent","StagingContentDV")
+	
+	f.Intrinsic.Control.If(v.DataTable.Lines.Exists)
+		f.Data.DataTable.Close("Lines")
+	f.Intrinsic.Control.EndIf
+	f.Data.DataTable.Create("Lines",True)
+	f.Data.DataTable.AddColumn("Lines","PO","String","")
+	f.Data.DataTable.AddColumn("Lines","Line","String","")
+	f.Data.DataTable.AddColumn("Lines","Type","String","")
+	f.Data.DataTable.AddColumn("Lines","LineContent","String","")
+	f.Data.DataTable.AddColumn("Lines","Part","String","")
+	f.Data.DataTable.AddColumn("Lines","Location","String","")
+	f.Data.DataTable.AddColumn("Lines","Description","String","")
+	f.Data.DataTable.AddColumn("Lines","CustomerPart","String","")
+	f.Data.DataTable.AddColumn("Lines","CustomerDescription","String","")
+	f.Data.DataTable.AddColumn("Lines","Qty","Float",0)
+	f.Data.DataTable.AddColumn("Lines","CustomerPrice","String","")
+	f.Data.DataTable.AddColumn("Lines","Price","Float",0)
+	f.Data.DataTable.AddColumn("Lines","Extension","Float",0)
+	f.Data.DataView.Create("Lines","LinesDV")
+	
+	f.Intrinsic.Control.If(v.DataTable.Surcharges.Exists)
+		f.Data.DataTable.Close("Surcharges")
+	f.Intrinsic.Control.EndIf
+	f.Data.DataTable.Create("Surcharges",True)
+	f.Data.DataTable.AddColumn("Surcharges","PO","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Line","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Type","String","")
+	f.Data.DataTable.AddColumn("Surcharges","LineContent","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Part","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Location","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Description","String","")
+	f.Data.DataTable.AddColumn("Surcharges","CustomerPart","String","")
+	f.Data.DataTable.AddColumn("Surcharges","CustomerDescription","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Qty","Float",0)
+	f.Data.DataTable.AddColumn("Surcharges","CustomerPrice","String","")
+	f.Data.DataTable.AddColumn("Surcharges","Price","Float",0)
+	f.Data.DataTable.AddColumn("Surcharges","Extension","Float",0)
+	f.Data.DataView.Create("Surcharges","SurchargesDV")
+	
+	f.Intrinsic.Control.If(v.DataTable.NewContent.Exists)
+		f.Data.DataTable.Close("NewContent")
+	f.Intrinsic.Control.EndIf
+	f.Data.DataTable.Create("NewContent",True)
+	f.Data.DataTable.AddColumn("NewContent","PO","String","")
+	f.Data.DataTable.AddColumn("NewContent","Line","String","")
+	f.Data.DataTable.AddColumn("NewContent","Type","String","")
+	f.Data.DataTable.AddColumn("NewContent","Content","String","")
+	f.Data.DataTable.AddColumn("NewContent","Part","String","")
+	f.Data.DataTable.AddColumn("NewContent","Location","String","")
+	f.Data.DataTable.AddColumn("NewContent","Description","String","")
+	f.Data.DataTable.AddColumn("NewContent","CustomerPart","String","")
+	f.Data.DataTable.AddColumn("NewContent","CustomerDescription","String","")
+	f.Data.DataTable.AddColumn("NewContent","Qty","Float",0)
+	f.Data.DataTable.AddColumn("NewContent","CustomerPrice","String","")
+	f.Data.DataTable.AddColumn("NewContent","Price","Float",0)
+	f.Data.DataTable.AddColumn("NewContent","Extension","Float",0)
+	f.Data.DataView.Create("NewContent","NewContentDV")
+	
+'	v.Global.sSourceFile.Set(v.Screen.Form!txtSourceFile.Text.Trim)
+	f.Intrinsic.File.File2String(v.Screen.Form!txtSourceFile.Text.Trim,v.Local.sContent)
+	f.Intrinsic.String.Split(v.Local.sContent,v.Ambient.NewLine,v.Local.sContent)
+
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sContent.UBound,1)		
+	
+		f.Intrinsic.Control.If(v.Local.sContent(v.Local.iCnt).Trim,<>,"")
+			'Check If this is a new order. This program will only process new order
+			f.Intrinsic.String.Mid(v.Local.sContent(v.Local.iCnt),54,1,v.Local.sChangeOrder)
+			f.Intrinsic.Control.If(v.Local.sChangeOrder,<>," ")
+				f.Intrinsic.UI.Msgbox("This is not a new order","End")
+				f.Intrinsic.Control.CallSub("Unload")
+			f.Intrinsic.Control.EndIf
+			
+			'PO number
+			f.Intrinsic.String.Mid(v.Local.sContent(v.Local.iCnt),36,15,v.Local.sPO)
+			
+			'Process Header or Lines
+			f.Intrinsic.String.Mid(v.Local.sContent(v.Local.iCnt),51,3,v.Local.sLineNum)
+			v.Local.iLineNum.Set(v.Local.sLineNum)
+			f.Intrinsic.Control.If(v.Local.iLineNum,=,0)
+				'This is a header record
+				f.Data.DataTable.AddRow("StagingContent","Line","","Content",v.Local.sContent(v.Local.iCnt),"PO",v.Local.sPO)				
+			f.Intrinsic.Control.ElseIf(v.Local.iLineNum,<>,0)
+				'This is a line record
+				f.Intrinsic.String.Build("Line = '{0}' and PO = '{1}'",v.Local.sLineNum,v.Local.sPO,v.Local.sFilter)
+				f.Data.DataView.SetFilter("StagingContent","StagingContentDV",v.Local.sFilter)
+				f.Intrinsic.Control.If(v.DataView.StagingContent!StagingContentDV.RowCount,=,0)
+					f.Data.DataTable.AddRow("StagingContent","Line",v.Local.sLineNum,"Content","","PO",v.Local.sPO)
+				f.Intrinsic.Control.EndIf				
+				'Move to Lines table
+				f.Intrinsic.String.Mid(v.Local.sContent(v.Local.iCnt),511,1,v.Local.sType)
+				f.Intrinsic.Control.If(v.Local.sType,=,"M")
+					f.Intrinsic.String.Mid(v.Local.sContent(v.Local.iCnt),55,12,v.Local.sHold)
+					v.Local.fQty.Set(v.Local.sHold)
+					f.Data.DataTable.AddRow("Lines","Line",v.Local.sLineNum,"Type",v.Local.sType,"LineContent",v.Local.sContent(v.Local.iCnt),"Qty",v.Local.fQty,"PO",v.Local.sPO)	
+				f.Intrinsic.Control.Else
+					f.Data.DataTable.AddRow("Lines","Line",v.Local.sLineNum,"Type",v.Local.sType,"LineContent",v.Local.sContent(v.Local.iCnt),"PO",v.Local.sPO)	
+				f.Intrinsic.Control.EndIf
+								
+			f.Intrinsic.Control.EndIf		
+
+		f.Intrinsic.Control.EndIf
+		
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+
+
+	'Lines 1
+	f.Intrinsic.String.Split("1,36,51,54,55,75,77,89,91,104,134,164,194,202,210,218,226,229,230,231,266,267,275,276,293,310,311,331,351,352,355,385,415,445,475,483,484,485,486,511",",",v.Local.iPosition1)
+	f.Intrinsic.String.Split("35,15,3,1,20,2,12,2,13,30,30,30,8,8,8,8,3,1,1,35,1,8,1,17,17,1,20,20,1,3,30,30,30,30,8,1,1,1,25,1",",",v.Local.iLen1)	
+	'Text_Info1: 311 - index 26
+	'Text_Info2: 331 - index 37
+	'User 4: 226 - index 16
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.DataTable.Lines.RowCount--)
+		v.Local.sType.Set(v.DataTable.Lines(v.Local.iCnt).Type!FieldValString)
+		v.Local.sPO.Set(v.DataTable.Lines(v.Local.iCnt).PO!FieldValString)
+		f.Intrinsic.Control.If(v.Local.sType,=,"1")
+			F.Intrinsic.String.PositionalSplit(v.DataTable.Lines(v.Local.iCnt).LineContent!FieldValString,V.Local.iPosition1,V.Local.iLen1,V.Local.sOrigLine)	
+			v.Local.sCustomer.Set(v.Local.sOrigLine(0))
+			v.Local.sCustomerPart.Set(v.Local.sOrigLine(4))
+			v.Local.sCustomerDescription.Set(v.Local.sOrigLine(9))
+			v.Local.fCustomerPrice.Set(v.Local.sOrigLine(8))
+			'Part
+			f.Intrinsic.String.build("select Top 1 Part,Location,Description from inv_cross_ref where ltrim(rtrim(customer_part)) = '{0}' and customer = '{1}'",v.Local.sCustomerPart.Trim,v.Local.sCustomer,v.Local.sSQL)
+			f.Data.DataTable.CreateFromSQL("Parts","conx",v.Local.sSQL,True)
+			f.Intrinsic.Control.If(v.DataTable.Parts.RowCount,=,1)
+				v.Local.sPart.Set(v.DataTable.Parts(0).Part!FieldValString)
+				v.Local.sLocation.Set(v.DataTable.Parts(0).Location!FieldValString)
+				v.Local.sDescription.Set(v.DataTable.Parts(0).Description!FieldValString)				
+			f.Intrinsic.Control.Else
+				v.Local.sPart.Set("")
+				v.Local.sLocation.Set("")
+				v.Local.sDescription.Set("")						
+			f.Intrinsic.Control.EndIf
+			f.Data.DataTable.Close("Parts")					
+			'Qty
+			f.Intrinsic.Math.Div(v.Local.sOrigLine(6),10000,v.Local.fQty)	
+			
+			f.Data.DataTable.SetValue("Lines",v.Local.iCnt,"Part",v.Local.sPart,"Location",v.Local.sLocation,"Description",v.Local.sDescription,"CustomerPart",v.Local.sCustomerPart,"CustomerDescription",v.Local.sCustomerDescription,"Qty",v.Local.fQty,"CustomerPrice",v.Local.fCustomerPrice)
+			
+			'Get Surcharge
+			f.Intrinsic.String.Build("Select Text_Info2 from Inventory_Mst2 where Part = '{0}' and Location = '{1}'",v.Local.sPart,v.Local.sLocation,v.Local.sSQL)
+			f.ODBC.Connection!conx.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+		
+			f.Intrinsic.Control.If(v.Local.sRet.Trim,<>,"")				
+				v.Local.sSurcharge.Set(v.Local.sRet.Trim)
+				'f.Intrinsic.String.Build("|~~~|{0}",v.Local.sSurcharge,v.Local.sOrigLine(31))
+				'f.Intrinsic.String.RPad(v.Local.sOrigLine(31)," ",30,v.Local.sOrigLine(31))
+				'f.Intrinsic.String.Build("{0}-{1}",v.Local.sSurcharge,v.Local.sLocation,v.Local.sHold)
+				'f.Intrinsic.String.RPad("|~EDISURCHARGE~|"," ",30,v.Local.sOrigLine(30))
+				'v.Local.sOrigLine(16).Set("001")
+				v.Local.sSurchargeDescription.Set(v.dictionary.PartDescDict![v.Local.sHold])
+				
+				f.Intrinsic.String.RPad(v.Local.sSurcharge," ",20,v.Local.sHold)
+				v.Local.sOrigLine(4).Set(v.Local.sHold)
+				f.Intrinsic.String.RPad(v.Local.sSurchargeDescription," ",30,v.Local.sHold)
+				v.Local.sOrigLine(9).Set(v.Local.sHold)
+				f.Intrinsic.String.Join(v.Local.sOrigLine,"",v.Local.sOrigLine)
+				
+				f.Data.DataTable.AddRow("Surcharges","Line",v.DataTable.Lines(v.Local.iCnt).Line!FieldValString,"Type",v.Local.sType,"LineContent",v.Local.sOrigLine,"Part",v.Local.sSurcharge,"Location",v.Local.sLocation,"Description",v.Local.sSurchargeDescription,"CustomerPart",v.Local.sSurcharge,"CustomerDescription",v.Local.sSurchargeDescription,"Qty",v.Local.fQty,"PO",v.Local.sPO)
+				
+				f.Intrinsic.String.Build("Line = '{0}' and Type = 'M' and PO = '{1}'",v.DataTable.Lines(v.Local.iCnt).Line!FieldValString,v.Local.sPO,v.Local.sFilter)
+				f.Data.DataView.SetFilter("Lines","LinesDV",v.Local.sFilter)
+				f.Intrinsic.Control.For(v.Local.iInner,0,v.DataView.Lines!LinesDV.RowCount--,1)
+				
+					f.Intrinsic.String.Mid(v.DataView.Lines!LinesDV(v.Local.iInner).LineContent!FieldValString,55,12,v.Local.sHold)
+					v.Local.fQty.Set(v.Local.sHold)
+					f.Data.DataTable.AddRow("Surcharges","Line",v.DataTable.Lines(v.Local.iCnt).Line!FieldValString,"Type","M","LineContent",v.DataView.Lines!LinesDV(v.Local.iInner).LineContent!FieldValString,"Qty",v.Local.fQty,"PO",v.Local.sPO)
+				f.Intrinsic.Control.Next(v.Local.iInner)				
+			f.Intrinsic.Control.EndIf				
+			
+		f.Intrinsic.Control.EndIf	
+
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+
+	f.Data.DataView.Create("StagingContent","dvPO")
+	f.Intrinsic.Control.If(v.DataTable.distinctPO.Exists)
+		f.Data.DataTable.Close("distinctPO")
+	f.Intrinsic.Control.EndIf
+	f.Data.DataView.ToDataTableDistinct("StagingContent","dvPO","distinctPO","PO",True)
+	f.Data.DataView.Close("StagingContent","dvPO")
+	
+	f.Data.DataView.Create("StagingContent","dvByPO")	
+	f.Intrinsic.Control.For(v.Local.iOuter,0,v.DataTable.distinctPO.RowCount--,1)
+		v.Local.sPO.Set(v.DataTable.distinctPO(v.Local.iOuter).PO!FieldValString)
+	 	f.Intrinsic.String.Build("PO = '{0}'",v.Local.sPO,v.Local.sFilter)
+	 	f.Data.DataView.SetFilter("StagingContent","dvByPO",v.Local.sFilter)
+	 	
+		'Parse StageContent to NewContent
+		v.Local.iNewLineNum.Set(0)
+		f.Intrinsic.Control.For(v.Local.iCnt,0,v.DataView.StagingContent!dvByPO.RowCount--,1)
+			v.Local.sLineNum.Set(v.DataView.StagingContent!dvByPO(v.Local.iCnt).Line!FieldValString)
+	
+			
+			f.Intrinsic.Control.If(v.Local.sLineNum,=,"")
+				f.Intrinsic.String.Mid(v.DataView.StagingContent!dvByPO(v.Local.iCnt).Content!FieldValString,511,1,v.Local.sType)
+				f.Data.DataTable.AddRow("NewContent","Line","","Type",v.Local.sType,"Content",v.DataView.StagingContent!dvByPO(v.Local.iCnt).Content!FieldValString,"PO",v.Local.sPO)
+			f.Intrinsic.Control.Else
+				'Get Original Lines
+				f.Intrinsic.String.Build("Line = '{0}' and PO = '{1}'",v.Local.sLineNum,v.Local.sPO,v.Local.sFilter)
+				f.Data.DataView.SetFilter("Lines","LinesDV",v.Local.sFilter)
+				f.Intrinsic.Control.If(v.DataView.Lines!LinesDV.RowCount,>,0)
+					'Increment Line Number
+					f.Intrinsic.Math.Add(v.Local.iNewLineNum,1,v.Local.iNewLineNum)
+					f.Intrinsic.String.LPad(v.Local.iNewLineNum,"0",3,v.Local.sNewLineNum)
+				f.Intrinsic.Control.EndIf
+				'Add Original Lines	
+				f.Intrinsic.Control.For(v.Local.iInner,0,v.DataView.Lines!LinesDV.RowCount--,1)
+					f.Intrinsic.String.Mid(v.DataView.Lines!LinesDV(v.Local.iInner).LineContent!FieldValString,511,1,v.Local.sType)
+					F.Intrinsic.String.PositionalSplit(v.DataView.Lines!LinesDV(v.Local.iInner).LineContent!FieldValString,V.Local.iPosition1,V.Local.iLen1,V.Local.sHold)
+					v.Local.sHold(2).Set(v.Local.sNewLineNum)				
+					f.Intrinsic.String.Join(v.Local.sHold,"",v.Local.sHold)
+					f.Intrinsic.Control.If(v.Local.sType,=,"M")
+						f.Data.DataTable.AddRow("NewContent","Line",v.Local.sNewLineNum,"Type",v.Local.sType,"Content",v.Local.sHold,"Qty",v.DataView.Lines!LinesDV(v.Local.iInner).Qty!FieldValString,"PO",v.Local.sPO)
+					f.Intrinsic.Control.Else
+						f.Data.DataTable.AddRow("NewContent","Line",v.Local.sNewLineNum,"Type",v.Local.sType,"Content",v.Local.sHold,"Part",v.DataView.Lines!LinesDV(v.Local.iInner).Part!FieldValString,"Location",v.DataView.Lines!LinesDV(v.Local.iInner).Location!FieldValString,"Description",v.DataView.Lines!LinesDV(v.Local.iInner).Description!FieldValString,"CustomerPart",v.DataView.Lines!LinesDV(v.Local.iInner).CustomerPart!FieldValString,"CustomerDescription",v.DataView.Lines!LinesDV(v.Local.iInner).CustomerDescription!FieldValString,"Qty",v.DataView.Lines!LinesDV(v.Local.iInner).Qty!FieldValString,"CustomerPrice",v.DataView.Lines!LinesDV(v.Local.iInner).CustomerPrice!FieldValString,"PO",v.Local.sPO)			
+					f.Intrinsic.Control.EndIf
+				f.Intrinsic.Control.Next(v.Local.iInner)
+				
+				'Get Surcharge
+				f.Intrinsic.String.Build("Line = '{0}' and PO = '{1}'",v.Local.sLineNum,v.Local.sPO,v.Local.sFilter)
+				f.Data.DataView.SetFilter("Surcharges","SurchargesDV",v.Local.sFilter)
+				f.Intrinsic.Control.If(v.DataView.Surcharges!SurchargesDV.RowCount,>,0)
+					'Increment Line Number
+					f.Intrinsic.Math.Add(v.Local.iNewLineNum,1,v.Local.iNewLineNum)
+					f.Intrinsic.String.LPad(v.Local.iNewLineNum,"0",3,v.Local.sNewLineNum)
+				f.Intrinsic.Control.EndIf
+				'Add Surcharge			
+				f.Intrinsic.Control.For(v.Local.iInner,0,v.DataView.Surcharges!SurchargesDV.RowCount--,1)
+					f.Intrinsic.String.Mid(v.DataView.Surcharges!SurchargesDV(v.Local.iInner).LineContent!FieldValString,511,1,v.Local.sType)
+					F.Intrinsic.String.PositionalSplit(v.DataView.Surcharges!SurchargesDV(v.Local.iInner).LineContent!FieldValString,V.Local.iPosition1,V.Local.iLen1,V.Local.sHold)
+					v.Local.sHold(2).Set(v.Local.sNewLineNum)
+					'User 5: line number of the main line that the surcharge ties to
+					f.Intrinsic.Math.Sub(v.Local.sNewLineNum,1,v.Local.iRef)
+					f.Intrinsic.String.LPad(v.Local.iRef,"0","3",v.Local.sHold(16))
+					
+					f.Intrinsic.String.Join(v.Local.sHold,"",v.Local.sHold)
+					f.Intrinsic.Control.If(v.DataView.Surcharges!SurchargesDV(v.Local.iInner).Type!FieldValString,=,"M")
+						f.Data.DataTable.AddRow("NewContent","Line",v.Local.sNewLineNum,"Type",v.Local.sType,"Content",v.Local.sHold,"Qty",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).Qty!FieldValString,"PO",v.Local.sPO)					
+					f.Intrinsic.Control.Else			
+						
+						f.Data.DataTable.AddRow("NewContent","Line",v.Local.sNewLineNum,"Type",v.Local.sType,"Content",v.Local.sHold,"Part",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).Part!FieldValString,"Location",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).Location!FieldValString,"Description",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).Description!FieldValString,"CustomerPart",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).CustomerPart!FieldValString,"CustomerDescription",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).CustomerDescription!FieldValString,"Qty",v.DataView.Surcharges!SurchargesDV(v.Local.iInner).Qty!FieldValString,"PO",v.Local.sPO)					
+					f.Intrinsic.Control.EndIf
+				f.Intrinsic.Control.Next(v.Local.iInner)		
+			f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.Next(v.Local.iCnt)		
+	
+	
+	f.Intrinsic.Control.Next(v.Local.iOuter)
+	f.Data.DataView.Close("StagingContent","dvByPO")
+
+	'Display New EDI Lines Content	
+	f.Data.DataView.SetFilter("NewContent","NewContentDV","Trim(Isnull(Line,'')) <> ''")
+	gui.Form.gsEDI.AddGridviewFromDataview("GVMain","NewContent","NewContentDV")
+	
+	'Format gsEDI
+	Gui.Form.gsEDI.SetGridViewProperty("GVMain","EnableAppearanceOddRow",False)
+	Gui.Form.gsEDI.SetGridViewProperty("GVMain","AllowColumnResizing",True)
+	Gui.Form.gsEDI.SetGridViewProperty("GVMain","OptionsViewColumnAutoWidth",False)	
+	
+	'Caption
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Location","Caption","Locn")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPart","Caption","Customer Part")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerDescription","Caption","Customer Description")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPrice","Caption","Customer Price")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Qty","Caption","Quantity")
+	'Width
+	gui.Form.gsEDI.SetColumnProperty("GVMain","PO","Width","120")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Line","Width","50")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Type","Width","50")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Location","Width","50")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Part","Width","130")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPart","Width","130")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Description","Width","180")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerDescription","Width","180")
+	
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Qty","Width","90")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPrice","Width","110")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Price","Width","90")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Extension","Width","110")	
+	'Header Bold
+	gui.Form.gsEDI.SetColumnProperty("GVMain","PO","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Line","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Type","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Content","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Location","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Part","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPart","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Description","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerDescription","HeaderFontBold",True)	
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Qty","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPrice","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Price","HeaderFontBold",True)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Extension","HeaderFontBold",True)
+	
+	'Header Far
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Qty","HeaderHAlignment","far")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPrice","HeaderHAlignment","far")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Price","HeaderHAlignment","far")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Extension","HeaderHAlignment","far")	
+	'Header center
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Location","HeaderHAlignment","center")	
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Line","HeaderHAlignment","center")	
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Type","HeaderHAlignment","center")		
+	'Cell center
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Location","CellHAlignment","center")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Line","CellHAlignment","center")
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Type","CellHAlignment","center")
+	'Invisible
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Content","Visible",False)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","CustomerPrice","Visible",False)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Price","Visible",False)
+	gui.Form.gsEDI.SetColumnProperty("GVMain","Extension","Visible",False)
+	
+	gui.Form.gsEDI.MainView("GVMain")
+	
+	
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Parse_File.End
+
+Program.Sub.draft.Start
+	'EDIEA850-HEADER-H.
+'	f.Intrinsic.String.Split("35,15,3,1,8,8,17,8,1,25,8,8,1,1,3,3,1,10,10,8,1,335,1,1",",",v.Local.iPositionH)
+'	f.Intrinsic.String.Split("35,15,3,1,6,30,30,30,30,30,20,30,3,100,20,30,14,19,6,3,15,2,38,1,1",",",v.Local.iPositionA)
+'	f.Intrinsic.String.Split("35,15,3,1,40,40,40,40,40,40,25,2,13,25,40,30,20,1,60,1,1",",",v.Local.iPositionB)
+'	f.Intrinsic.String.Split("35,15,3,1,40,40,40,40,40,40,25,2,13,25,40,1,110,1,1",",",v.Local.iPositionC)
+
+'	f.Intrinsic.String.Split("35,15,3,1,9,12,10,1,12,12,12,388,1,1",",",v.Local.iPosition2)
+'	f.Intrinsic.String.Split("35,15,3,1,12,12,8,8,1,1,30,384,1,1",",",v.Local.iPositionM)
+'	f.Intrinsic.String.Split("35,15,3,1,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,6,1,1",",",v.Local.iPositionN)
+Program.Sub.draft.End
+
+Program.Sub.cmdSave_Click.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sOldFile.Declare
+	v.Local.sNewContent.Declare
+	v.Local.sOldContent.Declare	
+	
+	f.Data.DataView.SetFilter("NewContent","NewContentDV","")
+	f.Data.DataView.ToString("NewContent","NewContentDV","Content","",v.Ambient.NewLine,v.Local.sNewContent)
+	f.Intrinsic.File.String2File(v.Screen.Form!txtTargetFile.Text.Trim,v.Local.sNewContent)	
+	
+	'Rename old file to _Parsed
+	f.Intrinsic.File.File2String(v.Screen.Form!txtSourceFile.Text.Trim,v.Local.sOldContent)
+	f.Intrinsic.String.Build("{0}_Parsed",v.Screen.Form!txtSourceFile.Text.Trim,v.Local.sOldFile)
+	f.Intrinsic.File.String2File(v.Local.sOldFile,v.Local.sOldContent)
+	'Delete old file
+	f.Intrinsic.File.DeleteFile(v.Screen.Form!txtSourceFile.text.Trim)
+	f.Intrinsic.Control.CallSub("Unload")
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdSave_Click.End
+
+
+
