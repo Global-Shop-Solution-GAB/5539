@@ -1,0 +1,287 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+v.Global.bNewPackingList.Declare
+v.Global.sResult.Declare
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'BN, June 25, 2019
+'Customer: Round Ground
+'GS Mobile Staging Shipments
+'Customer will use the Ship by Lot standard Staging. Post processing hook for this is 31952, will stage the Surcharge line.
+'Just before staging the Surcharge, the program will use a callwrapper to allocate the Surcharge for the Sales Order
+F.Intrinsic.Control.SetErrorHandler("Main")
+F.Intrinsic.Control.ClearErrors
+	v.Local.sError.Declare
+	
+	F.ODBC.Connection!Conx.OpenConnection(Variable.ambient.PDSN,Variable.Ambient.PUSER,Variable.Ambient.PPass,600)
+	
+	'S10 - Post Staging hook
+	f.Intrinsic.Control.If(v.Caller.Hook,=,31952)			
+		f.Intrinsic.Control.CallSub("Process")		
+	f.Intrinsic.Control.EndIf
+
+	f.Intrinsic.Control.CallSub("Unload")
+
+F.Intrinsic.Control.Label("Main")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_5539_Shipping_Stage",V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	f.Intrinsic.Control.CallSub("Write_Error_Log","sError",v.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+Function.Intrinsic.Control.EndIf
+Program.Sub.Main.End
+
+
+Program.Sub.Process.Start
+F.Intrinsic.Control.SetErrorHandler("Process")
+F.Intrinsic.Control.ClearErrors
+	v.Local.sError.Declare	
+	v.Local.sRet.Declare
+	v.Local.sSQL.Declare	
+	v.Local.sFilter.Declare
+	
+	v.Local.sCurrentTransID.Declare
+	v.Local.sCurrentPart.Declare
+	v.Local.sCurrentLocation.Declare
+	v.Local.sCurrentProductLine.Declare
+	v.Local.sCurrentOrder.Declare
+	v.Local.sCurrentLine.Declare
+	
+	v.Local.sLineToUpload.Declare
+	v.Local.sOrderToUpload.Declare
+	v.Local.sPartToUpload.Declare
+	v.Local.sLocToUpload.Declare
+	
+	'Get Current Transaction ID of the Main Line
+	v.Local.sCurrentTransID.Set(v.Passed.Line-ID)	
+	f.Intrinsic.String.Build("select * from v_wireless_hdr where Trans_ID = '{0}'",v.Local.sCurrentTransID,v.Local.sSQL)
+	f.ODBC.Connection!conx.OpenRecordsetRW("rstCurrentHeader",v.Local.sSQL)
+	f.Intrinsic.Control.If(V.ODBC.conx!rstCurrentHeader.EOF)
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	'Check successfull flag?
+'	f.Intrinsic.Control.If(v.ODBC.conx!rstCurrentHeader.FieldValTrim!Successful_Flag,<>,"Y")
+'		f.Intrinsic.Control.ExitSub
+'	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.String.Build("select * from v_wireless_Line where Trans_ID = '{0}'",v.Local.sCurrentTransID,v.Local.sSQL)
+	f.ODBC.Connection!conx.OpenRecordsetRW("rstCurrentLine",v.Local.sSQL)
+	f.Intrinsic.Control.If(V.ODBC.conx!rstCurrentLine.EOF)
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	'Get Current Order, and Current Line number
+	v.Local.sCurrentOrder.Set(v.ODBC.conx!rstCurrentLine.FieldValTrim!Field_2)
+	v.Local.sCurrentLine.Set((v.ODBC.conx!rstCurrentLine.FieldValTrim!Field_3)
+	f.Intrinsic.String.Build("Select Order_No,Record_No,Part,Location,Product_Line from V_Order_Lines where Order_No = '{0}' and Record_no = '{1}0'",v.Local.sCurrentOrder,v.Local.sCurrentLine,v.Local.sSQL)
+	f.ODBC.Connection!Conx.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+	f.Intrinsic.Control.If(v.Local.sRet,=,"")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.Else
+		'Stop when the current part is a Surcharge (Part begins with SC) *****************************************************************************
+		f.Intrinsic.String.Split(v.Local.sRet,"*!*",v.Local.sRet)
+		v.Local.sCurrentPart.Set(v.Local.sRet(2).Trim)
+		v.Local.sCurrentLocation.Set(v.Local.sRet(3).Trim)
+		v.Local.sCurrentProductLine.Set(v.Local.sRet(4).Trim)			
+		f.Intrinsic.Control.If(v.Local.sCurrentPart.Left2,=,"SC")
+			f.Intrinsic.Control.ExitSub
+		f.Intrinsic.Control.EndIf		
+	f.Intrinsic.Control.EndIf
+	
+	'Get the Surcharge Line
+	f.Intrinsic.String.Build("Select Top 1 Record_No,Part,Location,Product_Line from V_Order_Lines where Order_No = '{0}' and ltrim(rtrim(User_5)) = '{1}' order by Record_No",v.Local.sCurrentOrder,v.Local.sCurrentLine,v.Local.sSQL)
+	f.ODBC.Connection!Conx.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+	f.Intrinsic.Control.If(v.Local.sRet,<>,"")
+		f.Intrinsic.String.Split(v.Local.sRet,"*!*",v.Local.sRet)
+		v.Local.sOrderToUpload.Set(v.Local.sCurrentOrder)
+		v.Local.sLineToUpload.Set(v.Local.sRet(0).Trim)		
+		v.Local.sPartToUpload.Set(v.Local.sRet(1).Trim)
+		v.Local.sLocToUpload.Set(v.Local.sRet(2).Trim)
+		
+v.Local.sParams.Declare
+v.Local.sHold.Declare
+
+		'Allocate the Surcharge before staging
+		F.Intrinsic.String.RPad(V.Local.sPartToUpload," ",20,V.Local.sHold)
+		f.Intrinsic.String.Build("R!*!{0}!*!{1}!*!IL!*!{2}!*!{3}!*!{4}!*!350501!*!SC-BIN!*!!*!!*!D",v.Local.sPartToUpload.left17,v.Local.sHold.Right3,v.ODBC.conx!rstCurrentLine.FieldValTrim!Field_14,v.Local.sCurrentOrder,v.Local.sCurrentLine,v.Local.sParams)
+		F.Global.General.CallWrapperSync(7100,v.Local.sParams)
+		
+		'Prepare to upload
+		F.ODBC.Connection!conx.OpenRecordsetRW("rstHeader","SELECT * from WIRELESS_HDR")
+		f.ODBC.Connection!conx.OpenRecordsetRW("rstLine","Select * from Wireless_Line")
+
+		'1/ Write a record to Wireless_Hdr
+		Function.ODBC.conx!rstHeader.AddNew
+		Function.ODBC.conx!rstHeader.Set!TRANS_TYPE("S10")
+		Function.ODBC.conx!rstHeader.Set!ATTEMPTED_DATE("00000000")
+		Function.ODBC.conx!rstHeader.Set!ATTEMPTED_TIME("00000000")
+		Function.ODBC.conx!rstHeader.Set!DEFAULT_PRINTER(v.ODBC.conx!rstCurrentHeader.FieldValTrim!DEFAULT_PRINTER)
+		Function.ODBC.conx!rstHeader.Set!LABEL_PRINTER(v.ODBC.conx!rstCurrentHeader.FieldValTrim!LABEL_PRINTER)
+		Function.ODBC.conx!rstHeader.Set!USER_ID(v.ODBC.conx!rstCurrentHeader.FieldValTrim!USER_ID)
+		Function.ODBC.conx!rstHeader.Set!BATCH(v.ODBC.conx!rstCurrentHeader.FieldValTrim!BATCH)
+		Function.ODBC.conx!rstHeader.Set!USE_LABEL_PRINTER(v.ODBC.conx!rstCurrentHeader.FieldValTrim!USE_LABEL_PRINTER)			
+			
+		'2/ Write 1 transaction to Wireless_Line	
+		f.ODBC.conx!rstLine.AddNew
+		F.ODBC.conx!rstLine.Set!SEQ("0000")
+		F.ODBC.conx!rstLine.Set!TRANS_TYPE("S10")
+		'PackingList Field_1
+		F.ODBC.conx!rstLine.Set!FIELD_1(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_1)
+		'Order and Line
+		F.ODBC.conx!rstLine.Set!FIELD_2(v.Local.sCurrentOrder)
+		F.ODBC.conx!rstLine.Set!FIELD_3(v.Local.sLineToUpload.left3)
+		'Part,Location
+		F.ODBC.conx!rstLine.Set!FIELD_4(v.Local.sPartToUpload)
+		F.ODBC.conx!rstLine.Set!FIELD_5(v.Local.sLocToUpload)
+		
+		f.Intrinsic.String.Build("Select Lot,Bin,Heat from Item_master where Part = '{0}' and Location = '{1}' and rtrim(Serial_Number) = '{2}-{3}'",v.Local.sPartToUpload,v.Local.sLocToUpload,v.Local.sCurrentOrder,v.Local.sCurrentLine,v.Local.sSQL)
+		f.ODBC.Connection!Conx.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+		f.Intrinsic.Control.If(v.Local.sRet,=,"")
+			f.Intrinsic.Control.CallSub("Unload")
+		f.Intrinsic.Control.EndIf
+		f.Intrinsic.String.Split(v.Local.sRet,"*!*",v.Local.sRet)
+		
+		'Lot
+		F.ODBC.conx!rstLine.Set!FIELD_6(v.Local.sRet(0))
+		'Bin
+		F.ODBC.conx!rstLine.Set!FIELD_7(v.Local.sRet(1))
+		'Heat
+		F.ODBC.conx!rstLine.Set!FIELD_8(v.Local.sRet(2))
+		'Serial is always blank
+		F.ODBC.conx!rstLine.Set!FIELD_9("")		
+		
+		'Other fields will be the same as the main line's		
+		F.ODBC.conx!rstLine.Set!FIELD_10(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_10)
+		F.ODBC.conx!rstLine.Set!FIELD_11(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_11)
+		F.ODBC.conx!rstLine.Set!FIELD_12(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_12)
+		F.ODBC.conx!rstLine.Set!FIELD_13(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_13)
+		F.ODBC.conx!rstLine.Set!FIELD_14(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_14)
+		F.ODBC.conx!rstLine.Set!FIELD_15(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_15)
+		F.ODBC.conx!rstLine.Set!FIELD_16(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_16)
+		F.ODBC.conx!rstLine.Set!FIELD_17(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_17)
+		F.ODBC.conx!rstLine.Set!FIELD_18(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_18)
+		F.ODBC.conx!rstLine.Set!FIELD_19(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_19)
+		F.ODBC.conx!rstLine.Set!FIELD_20(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_20)
+		F.ODBC.conx!rstLine.Set!FIELD_21(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_21)
+		F.ODBC.conx!rstLine.Set!FIELD_22(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_22)
+		F.ODBC.conx!rstLine.Set!FIELD_23(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_23)
+		F.ODBC.conx!rstLine.Set!FIELD_24(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_24)
+		F.ODBC.conx!rstLine.Set!FIELD_25(v.ODBC.conx!rstCurrentLine.FieldValTrim!FIELD_25)		
+
+		'We have to get the next TransID and upload immediately, in order to limit the gap of time in between when other scanning gun can get this TransID
+		f.Intrinsic.Control.CallSub("Get_Next_TransID")
+		f.ODBC.conx!rstLine.Set!TRANS_ID(V.Args.sTransID)
+		'Upload Line First
+		F.ODBC.conx!rstLine.Update
+		'Upload Header later	
+		Function.ODBC.conx!rstHeader.Set!TRANS_ID(V.Args.sTransID)
+		F.ODBC.conx!rstHeader.Update			
+		
+		F.ODBC.conx!rstHeader.Close
+		F.ODBC.conx!rstLine.Close
+		
+	f.Intrinsic.Control.EndIf
+	
+	f.ODBC.conx!rstCurrentHeader.Close
+	F.ODBC.conx!rstCurrentLine.Close	
+
+	f.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("Process")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_5539_Shipping_Stage",V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	f.Intrinsic.Control.CallSub("Write_Error_Log","sError",v.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+Function.Intrinsic.Control.EndIf
+Program.Sub.Process.End
+
+
+Program.Sub.Get_Next_TransID.Start
+F.Intrinsic.Control.SetErrorHandler("Get_Next_TransID")
+F.Intrinsic.Control.ClearErrors
+	v.Local.sError.Declare
+	v.Local.sRet.Declare
+	
+	f.ODBC.Connection!Conx.ExecuteAndReturn("Select top 1 Trans_ID from V_Wireless_Hdr Order by Trans_ID desc",v.Local.sRet)
+	f.Intrinsic.Math.Add(v.Local.sRet,1,v.Local.sRet)
+	f.Intrinsic.String.LPad(v.Local.sRet,"0",9,v.Local.sRet)
+	f.Intrinsic.Variable.AddRV("sTransID",v.Local.sRet)
+		
+	f.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Get_Next_TransID")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_5539_Shipping_Stage",V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	f.Intrinsic.Control.CallSub("Write_Error_Log","sError",v.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+Function.Intrinsic.Control.EndIf
+Program.Sub.Get_Next_TransID.End
+
+Program.Sub.Unload.Start
+F.Intrinsic.Control.SetErrorHandler("Unload")
+F.Intrinsic.Control.ClearErrors
+	
+	F.Intrinsic.Control.If(V.ODBC.conx.State,=,1)
+		F.ODBC.Connection!conx.close
+	F.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.End
+
+F.Intrinsic.Control.Label("Unload")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	f.Intrinsic.Control.End
+Function.Intrinsic.Control.EndIf
+Program.Sub.Unload.End
+
+Program.Sub.Write_Error_Log.Start
+'Parameters: sError
+F.Intrinsic.Control.SetErrorHandler("Write_Error_Log")
+F.Intrinsic.Control.ClearErrors
+	v.Local.bExist.Declare
+	v.Local.sFile.Declare
+	v.Local.sDir.Declare
+	
+	f.Intrinsic.String.Build("{0}\Custom",v.Caller.GlobalDir,v.Local.sDir)
+	f.Intrinsic.File.DirExists(v.Local.sDir,v.Local.bExist)
+	f.Intrinsic.Control.If(v.Local.bExist.Not)
+		f.Intrinsic.File.CreateDir(v.Local.sDir)
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.String.Build("{0}\Custom\5539",v.Caller.GlobalDir,v.Local.sDir)
+	f.Intrinsic.File.DirExists(v.Local.sDir,v.Local.bExist)
+	f.Intrinsic.Control.If(v.Local.bExist.Not)
+		f.Intrinsic.File.CreateDir(v.Local.sDir)
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.String.Build("{0}\Custom\5539\{1}",v.Caller.GlobalDir,v.Caller.CompanyCode,v.Local.sDir)
+	f.Intrinsic.File.DirExists(v.Local.sDir,v.Local.bExist)
+	f.Intrinsic.Control.If(v.Local.bExist.Not)
+		f.Intrinsic.File.CreateDir(v.Local.sDir)
+	f.Intrinsic.Control.EndIf	
+	
+	f.Intrinsic.String.Build("{0}\Custom\5539\{1}\Mobile",v.Caller.GlobalDir,v.Caller.CompanyCode,v.Local.sDir)
+	f.Intrinsic.File.DirExists(v.Local.sDir,v.Local.bExist)
+	f.Intrinsic.Control.If(v.Local.bExist.Not)
+		f.Intrinsic.File.CreateDir(v.Local.sDir)
+	f.Intrinsic.Control.EndIf
+	
+	'Write file
+	f.Intrinsic.String.Build("{0}\Custom\5539\{1}\Mobile\{2}",v.Caller.GlobalDir,v.Caller.CompanyCode,v.Ambient.Now.FormatYYYYMMDDHHNNSS,v.Local.sFile)
+	f.Intrinsic.File.String2File(v.Local.sFile,v.Args.sError)
+
+	f.Intrinsic.Control.ExitSub
+	
+F.Intrinsic.Control.Label("Write_Error_Log")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_5539_Shipping_Stage",V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	f.Intrinsic.Control.CallSub("Write_Error_Log","sError",v.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+Function.Intrinsic.Control.EndIf
+Program.Sub.Write_Error_Log.End
+
+
+
+
+
