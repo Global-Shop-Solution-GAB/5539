@@ -1,0 +1,1624 @@
+Program.Sub.ScreenSU.Start
+Gui.Quote..Create
+Gui.Quote..Size(19380,9360)
+Gui.Quote..MinX(0)
+Gui.Quote..MinY(0)
+Gui.Quote..Position(20,20)
+Gui.Quote..BackColor(-2147483633)
+Gui.Quote..MousePointer(0)
+Gui.Quote..Event(UnLoad,Quote_UnLoad)
+Gui.Quote..Caption("Quote Lines")
+Gui.Quote.gsQuote.Create(GsGridControl)
+Gui.Quote.gsQuote.Size(19035,7965)
+Gui.Quote.gsQuote.Position(135,360)
+Gui.Quote.gsQuote.Event(RowCellClick,gsQuote_RowCellClick)
+Gui.Quote.gsQuote.Event(CellValueChanged,gsQuote_CellValueChanged)
+Gui.Quote.cmdAddLine.Create(Button)
+Gui.Quote.cmdAddLine.Size(930,375)
+Gui.Quote.cmdAddLine.Position(1185,8400)
+Gui.Quote.cmdAddLine.Caption("&Add Line")
+Gui.Quote.cmdAddLine.ToolTip("Click to Add a Line")
+Gui.Quote.cmdAddLine.Event(Click,cmdAddLine_Click)
+Gui.Quote.cmdAddLine.Anchor(6)
+Gui.Quote.lblDiscount.Create(Label,"Discount",True,765,255,0,17355,8520,True,0,"Arial",8,-2147483633,0)
+Gui.Quote.lblGross.Create(Label,"Gross",True,570,255,0,13725,8520,True,0,"Arial",8,-2147483633,0)
+Gui.Quote.lblFreight.Create(Label,"Freight",True,645,255,0,15495,8520,True,0,"Arial",8,-2147483633,0)
+Gui.Quote.txtGross.Create(TextBox,"",True,1005,300,0,14325,8430,False,1,"Arial",8,-2147483643,1)
+Gui.Quote.txtFreight.Create(TextBox,"",True,1005,300,0,16155,8430,False,1,"Arial",8,-2147483643,1)
+Gui.Quote.txtDiscount.Create(TextBox,"",True,1005,300,0,18150,8430,False,1,"Arial",8,-2147483643,1)
+Gui.Quote.cmdHelp.Create(Button)
+Gui.Quote.cmdHelp.Size(660,315)
+Gui.Quote.cmdHelp.Position(18510,30)
+Gui.Quote.cmdHelp.Caption("&Help")
+Gui.Quote.cmdHelp.FontSize(7)
+Gui.Quote.cmdHelp.Event(Click,cmdHelp_Click)
+Gui.Quote.cmdContractPartPricing.Create(Button)
+Gui.Quote.cmdContractPartPricing.Size(1785,375)
+Gui.Quote.cmdContractPartPricing.Position(2265,8400)
+Gui.Quote.cmdContractPartPricing.Caption("&Contract Part Pricing")
+Gui.Quote.cmdContractPartPricing.ToolTip("Click to Add a Line")
+Gui.Quote.cmdContractPartPricing.Event(Click,cmdContractPartPricing_Click)
+Gui.Quote.cmdContractPartPricing.Anchor(6)
+Gui.Quote.cmdSave.Create(Button)
+Gui.Quote.cmdSave.Size(930,375)
+Gui.Quote.cmdSave.Position(105,8400)
+Gui.Quote.cmdSave.Anchor(6)
+Gui.Quote.cmdSave.Caption("&Save")
+Gui.Quote.cmdSave.ToolTip("Click to Add a Line")
+Gui.Quote.cmdSave.Event(Click,cmdSave_Click)
+Gui.Quote.cmdLog.Create(Button)
+Gui.Quote.cmdLog.Size(855,375)
+Gui.Quote.cmdLog.Position(4140,8400)
+Gui.Quote.cmdLog.Caption("Log")
+Gui.Quote.cmdLog.Event(Click,cmdLog_Click)
+Gui.Quote.cmdLog.Visible(False)
+Gui.Parts..Create
+Gui.Parts..Size(15315,8265)
+Gui.Parts..MinX(0)
+Gui.Parts..MinY(0)
+Gui.Parts..Position(15000,10)
+Gui.Parts..BackColor(-2147483633)
+Gui.Parts..MousePointer(0)
+Gui.Parts..Event(UnLoad,Parts_UnLoad)
+Gui.Parts..Caption("Part Selection")
+Gui.Parts.gsPart.Create(GsGridControl)
+Gui.Parts.gsPart.Size(14970,7170)
+Gui.Parts.gsPart.Position(105,570)
+Gui.Parts.gsPart.Event(KeyPress,gsParts_KeyPress)
+Gui.Parts.gsPart.Event(RowCellClick,gsPart_RowCellClick)
+Gui.Parts.txtPart.Create(TextBox,"",False,1215,300,0,1440,135,True,0,"Arial",8,-2147483643,1)
+Gui.Parts.cmdExitParts.Create(Button)
+Gui.Parts.cmdExitParts.Size(720,375)
+Gui.Parts.cmdExitParts.Position(14370,105)
+Gui.Parts.cmdExitParts.Caption("Exit")
+Gui.Parts.cmdExitParts.Event(Click,cmdExitParts_Click)
+Gui.Parts.cmdAllParts.Create(Button)
+Gui.Parts.cmdAllParts.Size(960,375)
+Gui.Parts.cmdAllParts.Position(105,120)
+Gui.Parts.cmdAllParts.Caption("All Parts")
+Gui.Parts.cmdAllParts.Event(Click,cmdAllParts_Click)
+Gui.Help..Create
+Gui.Help..Caption("Help")
+Gui.Help..Size(9570,4020)
+Gui.Help..MinX(0)
+Gui.Help..MinY(0)
+Gui.Help..Position(0,0)
+Gui.Help..BackColor(-2147483633)
+Gui.Help..MousePointer(0)
+Gui.Help..Event(UnLoad,Help_UnLoad)
+Gui.Help.txtHelp.Create(TextBoxR)
+Gui.Help.txtHelp.Size(9195,3330)
+Gui.Help.txtHelp.Position(135,105)
+Gui.ContractPricing..Create
+Gui.ContractPricing..Caption("Contract Part Pricing")
+Gui.ContractPricing..Size(16755,9705)
+Gui.ContractPricing..MinX(0)
+Gui.ContractPricing..MinY(0)
+Gui.ContractPricing..Position(0,0)
+Gui.ContractPricing..BackColor(-2147483633)
+Gui.ContractPricing..MousePointer(0)
+Gui.ContractPricing..Event(UnLoad,ContractPricing_UnLoad)
+Gui.ContractPricing.gsPartPricing.Create(GsGridControl)
+Gui.ContractPricing.gsPartPricing.Size(16380,9000)
+Gui.ContractPricing.gsPartPricing.Position(120,150)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+v.Global.sQuote.Declare
+v.Global.sCustomer.Declare
+v.Global.sShipID.Declare
+v.Global.sCommType.Declare
+v.Global.sDateQuote.Declare
+v.Global.sDateItemProm.Declare
+v.Global.sQuoteCurrency.Declare
+
+v.Global.sDiscount.Declare(string,"0.0000")
+v.Global.bChange.Declare(boolean)
+v.Global.iRowIndex.Declare
+v.Global.fFreight.Declare
+v.Global.sPreviousValue.Declare
+v.Global.iOldRows.Declare
+v.Global.iStartingLine.Declare
+v.Global.sLocation.Declare
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'BN May 20, 2019
+'This program will create a custom Quote Screen to input Quote Lines. We can only add new lines, and cannot modify/delete old lines. Old lines have to be handled by core screen
+'When a part is added as a line in the quote, add an additional part (surcharge part) which is the Inventory_Mst2.Text_Info2 of the line just added.
+
+'Estimating / Routing & Quote Management > File > Quick Quote > Open/New > Lines screen then Exit post hook
+
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	V.Local.sHold.Declare
+	v.Local.sYesNo.Declare
+	v.Local.sRet.Declare
+	
+	f.Intrinsic.Control.If(v.Caller.Hook,=,10260)
+		'Script 2 button
+		Variable.Passed.000202.Set("Custom Lines")
+		'Variable.Passed.000060: Quote Num
+		'Customer: Variable.Passed.000112
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+
+	'Quote Number: Variable.Passed.000060
+	'Customer" Variable.Passed.000112
+	'Location: Variable.Passed.000054
+	
+	
+	'Script 2 button hook
+	F.Intrinsic.Control.If(V.Caller.Hook,=,10680)
+	
+		F.ODBC.Connection!con.OpenCompanyConnection		
+		
+		'Set Global customer and quote number
+		f.Intrinsic.String.LPad(v.Passed.000060,"0",7,v.Global.sQuote)
+		v.Global.sCustomer.Set(v.Passed.000112)
+		v.Global.sLocation.Set(v.Passed.000054)
+		
+		gui.Parts..BindTo(v.Screen.Quote.HWnd,100,100)
+		gui.ContractPricing..BindTo(v.Screen.Quote.HWnd,100,100)
+		
+		f.Data.Dictionary.CreateFromSQL("dictAvail","con","select Part + '-' + Location as PartLoc,qty_onhand + QTY_ONORDER_PO +  QTY_ONORDER_WO - QTY_REQUIRED as availQty from inventory_mstr")	
+		f.Data.Dictionary.SetDefaultReturn("dictAvail",0)		
+		
+		'Get Quote Header and Bind Quote Lines
+		f.Intrinsic.Control.CallSub("Get_Quote_Header")
+		f.Intrinsic.Control.CallSub("Bind_Quote_Lines")
+		
+		gui.Quote..Visible(True)
+		
+		'Bind Browser
+		f.Intrinsic.Control.CallSub("Bind_Mock_Part_Browser")
+		
+		'Bind Contract Part Pricing
+		gui.ContractPricing.gsPartPricing.Anchor(15)
+		f.Intrinsic.Control.CallSub("Bind_Contract_Part_Pricing")
+		
+		'Freight
+		f.Intrinsic.String.Build("Select sum(Extension) from Quote_Lines where quote_no = '{0}' and Record_Type = 'L' and Line_Type = 'F'",v.Global.sQuote,v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Global.fFreight)
+		f.Intrinsic.String.Format(v.Global.fFreight,"0.00",v.Local.sHold)
+		gui.Quote.txtFreight.Text(v.Local.sHold)
+		
+		'Calculate Total
+		f.Intrinsic.Control.CallSub("calculate_sum")		
+			
+		'Set focus in gsQuote at the empty last Row		
+		gui.Quote.gsQuote.SetFocus
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount,>,0)
+			Gui.Quote.gsQuote.FocusCell("GV_Quote_Lines",v.DataTable.Quote_Lines.Rowcount--,3)	
+		f.Intrinsic.Control.EndIf		
+		
+	F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Main.End
+
+Program.Sub.UnLoad.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+
+	F.Intrinsic.Control.If(V.ODBC.con.State,=,1)
+		F.ODBC.Connection!con.close
+	F.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.End
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+Program.Sub.UnLoad.End
+
+Program.Sub.Get_Quote_Header.Start
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	v.Local.sRet.Declare
+	
+	'Get from Quote_Lines table
+	f.Intrinsic.String.Build("Select Top 1 QUOTE_NO,CUSTOMER, SHIP_ID,COMMISSION_TYPE,DATE_QUOTE, DATE_ITEM_PROM, QUOTE_CURR_CD from Quote_Lines where Quote_No = '{0}' and Record_Type = 'A'",v.Global.sQuote,v.Local.sSQL)
+
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSQL,v.Local.sRet)
+	f.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.Not)
+		f.Intrinsic.String.Split(v.Local.sRet,"*!*",v.Local.sRet)
+		v.Global.sCustomer.Set(v.Local.sRet(1))
+		v.Global.sShipID.Set(v.Local.sRet(2))
+		v.Global.sCommType.Set(v.Local.sRet(3))
+		v.Global.sDateQuote.Set(v.Local.sRet(4))
+		v.Global.sDateItemProm.Set(v.Local.sRet(5))
+		v.Global.sQuoteCurrency.Set(v.Local.sRet(6))	
+	f.Intrinsic.Control.Else
+		f.Intrinsic.UI.Msgbox("Cannot retrieve Quote Header.","Attention")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	'Get from V_Customer_ShipTo
+	f.Intrinsic.String.Build("Select Top 1 Discount from V_Customer_ShipTo where Customer = '{0}'",v.Global.sCustomer,v.Local.sSQL)
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSQL,v.Local.sRet)	
+	f.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.Not)
+		f.Intrinsic.String.Format(v.Local.sRet,"0.0000",v.Global.sDiscount)
+	f.Intrinsic.Control.EndIf	
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Get_Quote_Header.End
+
+Program.Sub.Bind_Quote_Lines.Start
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	v.Local.sHold.Declare
+	V.Local.sPartRange.Declare
+	V.Local.sDescriptionRange.Declare
+	v.Local.sDateItemProm.Declare
+	v.Local.iCnt.Declare
+	v.Local.bIsDate.Declare	
+	
+	f.Intrinsic.String.Format(v.Ambient.Date,"YYYY-MM-DD",v.Local.sDateItemProm)
+	
+	f.Intrinsic.Control.If(v.DataTable.Quote_Lines.Exists,=,True)
+		f.Data.DataTable.Close("Quote_Lines")
+	f.Intrinsic.Control.EndIf
+	
+	'Additional fields to be updated: Weight,Cost,Price_LB,Price_LB_Quote,Price_Bom_Comp_Flg,Flag_Always_Discount,Flag_Bom,Add_By_PGM,Date_Quote,Date_Item_Prom,Item_Promise_Dt,Add_By_Date,Add_By_Time
+	f.Intrinsic.String.Build("Select Cast(left(RECORD_NO,3) as Integer) as Line,'' as Type,PART,LOCATION, Part as PartOriginal, DESCRIPTION,DESCRIPTION as DESCRIPTIONOriginal,'Brw' as Brw,'' as Text_Info2,rtrim(User_5) as LineRef,rtrim(User_4) as User_4,QTY_QUOTED,QTY_QUOTED as QTY_QUOTEDOriginal, PRICE,PRICE AS PRICEOriginal, DISCOUNT, DISCOUNT AS DISCOUNTOriginal, AMT_DISCOUNT, DISCOUNT_PRICE, '' as Discount_Amt_Per_1 ,EXTENSION,Convert(0,SQL_Float) as AvailQty,Convert('{1}',SQL_Date) as DateItemProm,'Old' as Old_New,'' as Remove, 'Valid' as Part_validation,QUOTE_CURR_CD,QUOTE_DISC_AMT,AMT_DISC_QUOTE,PRICE_DISC_ORD, AMT_DISC_ORD_QUOTE,COST, MARGIN, QUOTE_WON,UM_QUOTE,UM_INVENTORY,PRODUCT_LINE,CUSTOMER_PART, CODE_SORT, COMMISSION_TYPE,GL_ACCOUNT,DATE_QUOTE,Part+'-'+Location as PartLoc,     Weight,Price_LB,Price_LB_Quote,Price_Bom_Comp_Flg,Flag_Always_Discount,Flag_Bom,Add_By_PGM,Date_Item_Prom,Item_Promise_Dt,Add_By_Date,Add_By_Time    from quote_Lines where quote_no = '{0}' and Record_Type = 'L'  ORDER BY Line",v.Global.sQuote,v.Local.sDateItemProm,v.Local.sSQL)
+	f.Data.DataTable.CreateFromSQL("Quote_Lines","con",v.Local.sSQL,True)
+	f.Data.DataTable.AddExpressionColumn("Quote_Lines","DateItemPromS","String","substring([Date_Item_Prom],5,2) + '/' + substring([Date_Item_Prom],7,2) + '/' + substring([Date_Item_Prom],1,4)")
+	
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.DataTable.Quote_Lines.RowCount--,1)
+		v.Local.sDateItemProm.Set(v.DataTable.Quote_Lines(v.Local.iCnt).DateItemPromS!FieldValString)
+		f.Intrinsic.Date.IsDate(v.Local.sDateItemProm,v.Local.bIsdate)
+		f.Intrinsic.Control.If(v.Local.bIsDate)
+			f.Data.DataTable.SetValue("Quote_Lines",v.Local.iCnt,"DateItemProm",v.Local.sDateItemProm)			
+		f.Intrinsic.Control.EndIf		
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+	f.Data.DataTable.AddExpressionColumn("Quote_Lines","DateItemPromOriginal","Date","DateItemProm")	
+	
+	'AvailQty
+	f.Data.DataTable.FillFromDictionary("Quote_Lines","dictAvail","PartLoc","AvailQty")
+	
+	'This is the start index for the new row
+	v.Global.iOldRows.Set(v.DataTable.Quote_Lines.RowCount)
+	'This is the max of old line number. When create the first new line, will increment this number
+	f.Data.DataTable.Compute("Quote_Lines","Max([Line])","",v.Global.iStartingLine)
+	
+	f.Intrinsic.Control.If(v.DataTable.Inv2.Exists)
+		f.Data.DataTable.Close("Inv2")
+	f.Intrinsic.Control.EndIf
+	f.Intrinsic.String.Build("Select Part+'-'+Location as PartLoc, rtrim(Text_Info2) as Text_Info2,ltrim(rtrim(Part)) +'-'+Location as SurchargePartLoc, Part from Inventory_Mst2  where Location = '{0}'",v.Global.sLocation,v.Local.sSQL)
+	f.Data.DataTable.CreateFromSQL("Inv2","con",v.Local.sSQL,True)	
+	'Create SurchargePartDict
+	f.Data.Dictionary.CreateFromDataTable("SurchargePartDict","Inv2","PartLoc","Text_Info2")
+	f.Data.Dictionary.SetDefaultReturn("SurchargePartDict","")
+	f.Data.DataTable.FillFromDictionary("Quote_Lines","SurchargePartDict","PartLoc","Text_Info2")
+	
+	'Create LotBin dictionary
+	f.Data.Dictionary.CreateFromSQL("LotBinDict","con","Select Part+'-'+Location as PartLoc,IsNull(FLAG_LOT,'') as Flag_Lot from Inventory_Mstr")
+	f.Data.Dictionary.SetDefaultReturn("LotBinDict","")	
+	
+	'Create SurchargeCheckLocDict used to check a Surcharge going with the location
+	f.Data.Dictionary.CreateFromDataTable("SurchargeCheckLocDict","Inv2","SurchargePartLoc","Part")
+	f.Data.Dictionary.SetDefaultReturn("SurchargeCheckLocDict","")
+
+	f.Data.Dictionary.CreateFromSQL("PLDict","con","Select Product_Line,Sales_Account from V_Product_Line")
+	f.Data.Dictionary.SetDefaultReturn("PLDict","")
+	
+	gui.Quote.gsQuote.AddGridviewFromDatatable("GV_Quote_Lines","Quote_Lines")
+	f.Intrinsic.Control.CallSub(Format_QuoteGrid)
+	
+	'Combobox for Part column
+'	f.Intrinsic.String.Build("Select Part from Inventory_Mstr where  Location = '{0}' and Flag_Inactive <> 'Y' ",v.Global.sLocation,v.Local.sSQL)
+'	f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sPartRange)
+'	f.Intrinsic.String.Replace(v.Local.sPartRange,"*!*","",v.Local.sPartRange)
+'	f.Intrinsic.String.Replace(v.Local.sPartRange,"#$#","*!*",v.Local.sPartRange)
+'	Gui.Quote.gsQuote.ColumnEdit("GV_Quote_Lines","Part","Combobox",v.Local.sPartRange)
+
+	f.Intrinsic.String.Build("Select Description from Inventory_Mstr where Location = '{0}' and Flag_Inactive <> 'Y'  ORDER BY DESCRIPTION",v.Global.sLocation,v.Local.sSQL)
+	f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sDescriptionRange)
+	f.Intrinsic.String.Replace(v.Local.sDescriptionRange,"*!*","",v.Local.sDescriptionRange)
+	f.Intrinsic.String.Replace(v.Local.sDescriptionRange,"#$#","*!*",v.Local.sDescriptionRange)
+	Gui.Quote.gsQuote.ColumnEdit("GV_Quote_Lines","Description","Combobox",v.Local.sDescriptionRange)		
+	
+	'Mainview
+	gui.Quote.gsQuote.MainView("GV_Quote_Lines")
+	
+	'Caption for custom form
+	f.Intrinsic.String.Concat("Quote: ",v.Global.sQuote," Customer: ",v.Global.sCustomer," Default discount: ",v.Global.sDiscount,v.Local.sHold)
+	gui.Quote..Caption(v.Local.sHold)
+	
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Bind_Quote_Lines.End
+
+Program.Sub.Format_QuoteGrid.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.sAllowEdit.Declare
+	v.Local.sInvisible.Declare
+	v.Local.sHeaderHAlignment.Declare
+	v.Local.sTapStop.Declare
+	v.Local.sFilter.Declare
+	v.Local.iCnt.Declare
+	
+	'0 - None		1 - Top			2 - Bottom		4 - Left		8 - Right	
+	'Set Anchor
+	gui.Quote.gsQuote.Anchor(15)
+	gui.Quote.cmdAddLine.Anchor(6)
+	gui.Quote.cmdContractPartPricing.Anchor(6)
+	
+	gui.Quote.lblDiscount.Anchor(10)
+	gui.Quote.lblGross.Anchor(10)
+	gui.Quote.lblFreight.Anchor(10)
+	
+	gui.Quote.txtGross.Anchor(10)
+	gui.Quote.txtFreight.Anchor(10)
+	gui.Quote.txtDiscount.Anchor(10)	
+	
+	'General setting
+	Gui.Quote.gsQuote.SetGridViewProperty("GV_Quote_Lines","AllowSort",False)
+	Gui.Quote.gsQuote.SetGridViewProperty("GV_Quote_Lines","AllowFilter",False)	
+	Gui.Quote.gsQuote.SetGridViewProperty("GV_Quote_Lines","OptionsViewRowAutoHeight",True)	
+	Gui.Quote.gsQuote.SetGridViewProperty("GV_Quote_Lines","EnableAppearanceOddRow",True)	
+	'For clicking Remove on each Row
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Remove","AllowEdit",false)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Remove","ReadOnly",True)	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Brw","AllowEdit",false)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Brw","ReadOnly",True)		
+	'AllowEdit on some columns
+	f.Intrinsic.String.Split("DESCRIPTION,QTY_QUOTED,PRICE,DISCOUNT,DATEITEMPROM",",",v.Local.sAllowEdit)
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sAllowEdit.UBound,1)
+		gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines",v.Local.sAllowEdit(v.Local.iCnt),"AllowEdit","True")
+		gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines",v.Local.sAllowEdit(v.Local.iCnt),"ReadOnly","False")
+	f.Intrinsic.Control.Next(v.Local.iCnt)	
+	'Invisible on other columns
+	V.Local.sInVisible.Set("PartOriginal,Qty_QuotedOriginal,PriceOriginal,DiscountOriginal,Amt_Discount,Discount_Amt_Per_1,QUOTE_CURR_CD,QUOTE_DISC_AMT,AMT_DISC_QUOTE,PRICE_DISC_ORD,AMT_DISC_ORD_QUOTE,MARGIN,QUOTE_WON,UM_QUOTE,UM_Inventory,PRODUCT_LINE,Location,CUSTOMER_PART,Code_Sort,COMMISSION_TYPE,GL_ACCOUNT,DATE_QUOTE,PartLoc,COST,Weight,Price_LB,Price_LB_Quote,Price_Bom_Comp_Flg,Flag_Always_Discount,Flag_Bom,Add_By_PGM,Date_Item_Prom,Item_Promise_Dt,Add_By_Date,Add_By_Time,DISCOUNT_PRICE,Discount,DescriptionOriginal,DateItemPromS,DateItemPromOriginal,User_4")
+	f.Intrinsic.String.Split(v.Local.sInvisible,",",v.Local.sInvisible)
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sInVisible.UBound,1)
+		gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines",v.Local.sInVisible(v.Local.iCnt),"Visible","False")
+	f.Intrinsic.Control.Next(v.Local.iCnt)	
+	'HeaderBackColor
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part","HeaderBackColor",v.Color.SEC-GSS-00)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Description","HeaderBackColor",v.Color.SEC-GSS-00)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Qty_Quoted","HeaderBackColor",v.Color.SEC-GSS-00)	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Price","HeaderBackColor",v.Color.SEC-GSS-00)	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Discount","HeaderBackColor",v.Color.SEC-GSS-00)		
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DISCOUNT_PRICE","HeaderBackColor",v.Color.SEC-GSS-00)	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","EXTENSION","HeaderBackColor",v.Color.SEC-GSS-00)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Text_Info2","HeaderBackColor",v.Color.SEC-GSS-00)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","LineRef","HeaderBackColor",v.Color.SEC-GSS-00)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Location","HeaderBackColor",v.Color.SEC-GSS-00)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Brw","HeaderBackColor",v.Color.SEC-GSS-00)
+	'HeaderHAlignment Far for numeric columns
+	f.Intrinsic.String.Split("QTY_QUOTED,PRICE,DISCOUNT,AMT_DISCOUNT,DISCOUNT_PRICE,EXTENSION,AvailQty",",",v.Local.sHeaderHAlignment)
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sHeaderHAlignment.UBound,1)
+		gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines",v.Local.sHeaderHAlignment(v.Local.iCnt),"HeaderHAlignment","Far")
+	f.Intrinsic.Control.Next(v.Local.iCnt)	
+	'HeaderHAlignment Center
+	f.Intrinsic.String.Split("Remove,Brw,Part_Validation,Old_New,LineRef,Type,Location,DateItemProm",",",v.Local.sHeaderHAlignment)
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sHeaderHAlignment.UBound,1)
+		gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines",v.Local.sHeaderHAlignment(v.Local.iCnt),"HeaderHAlignment","Center")
+	f.Intrinsic.Control.Next(v.Local.iCnt)	
+	'Header Bold
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Line","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Type","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Description","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Qty_Quoted","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Price","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Discount","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Discount_Price","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Extension","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Remove","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part_Validation","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Old_New","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Text_Info2","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","LineRef","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Location","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Brw","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DateItemProm","HeaderFontBold",True)
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","AvailQty","HeaderFontBold",True)
+	'Cell HAlignment
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Remove","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part_Validation","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Old_New","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","LineRef","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Type","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Location","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Brw","CellHAlignment","Center")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Line","CellHAlignment","Near")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DateItemProm","CellHAlignment","center")
+	'TabStop disable for columns that do not need to be entered. So columns to be entered will be tabbed quickly
+	f.Intrinsic.String.Split("Line,Part,Location,Discount_Price,Extension,Part_Validation,Remove,Old_New,Text_Info2,LineRef,Type",",",v.Local.sTapStop)
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sTapStop.UBound,1)
+		gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines",v.Local.sTapStop(v.Local.iCnt),"TabStop",False)
+	f.Intrinsic.Control.Next(v.Local.iCnt)	
+	'Caption
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","PART","Caption","Part")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DESCRIPTION","Caption","Description")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","QTY_QUOTED","Caption","Quantity")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","PRICE","Caption","Price")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DISCOUNT","Caption","Discount")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DISCOUNT_PRICE","Caption","Discount Price")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","EXTENSION","Caption","Extension")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part_Validation","Caption","Valid")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Old_New","Caption","Old/New")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Text_Info2","Caption","Surcharge")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","LineRef","Caption","Ref")	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Location","Caption","Loc")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","dateitemprom","Caption","Ship Date")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","AvailQty","Caption","Available Qty")
+	'Width
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Line","MaxWidth","40")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Brw","MaxWidth","40")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Remove","MaxWidth","70")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part_Validation","MaxWidth","70")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Description","Width","220")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Part","Width","130")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Old_New","Width","40")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Text_Info2","Width","130")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","LineRef","Width","35")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Type","Width","35")	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Location","Width","35")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DATEITEMPROM","Width","80")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","AvailQty","Width","80")
+	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DateItemProm","DisplayCustomDateTime","d")
+	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","AvailQty","ToolTip","On Hand + On Order PO + On Order WO) - Requirements")
+
+	'Display numeric number
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","QTY_QUOTED","DisplayCustomNumeric","#,###,###,##0")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","PRICE","DisplayCustomNumeric","#,###,###,##0.00")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DISCOUNT","DisplayCustomNumeric","#,###,###,##0.00")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","DISCOUNT_PRICE","DisplayCustomNumeric","#,###,###,##0.00")
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","EXTENSION","DisplayCustomNumeric","#,###,###,##0.00")	
+	gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","AvailQty","DisplayCustomNumeric","#,###,###,##0.0000")	
+	'Set forecolor Old/New
+	gui.Quote.gsQuote.AddStyleFormatCondition("GV_Quote_Lines","Old_New","tagOld","equal","Old")
+	gui.Quote.gsQuote.SetStyleFormatConditionProperty("GV_Quote_Lines","Old_New","tagOld","forecolor","Red")	
+	'Set Back Color for columns that need to be entered
+	Gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Description","CellBackColor","Beige")
+	Gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Qty_Quoted","CellBackColor","Beige")
+	Gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Price","CellBackColor","Beige")
+	Gui.Quote.gsQuote.SetColumnProperty("GV_Quote_Lines","Discount","CellBackColor","Beige")		
+	'Summary item
+	gui.Quote.gsQuote.AddSummaryItem("GV_Quote_Lines","EXTENSION","Sum_Extension","Sum","","","n")
+	'Editor
+	gui.Quote.gsQuote.ColumnEdit("GV_Quote_Lines","Brw","editorbutton","Brw")
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Format_QuoteGrid.End
+
+Program.Sub.Bind_Mock_Part_Browser.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.sSQL.Declare
+
+	'Bind Parts "mock browser" table	
+	f.Intrinsic.String.Build("Select Part, Description, Location, Qty_OnHand, Product_Line,Amt_Price as Price,qty_onhand + QTY_ONORDER_PO +  QTY_ONORDER_WO - QTY_REQUIRED as Available, 'Select' as SelectPart from Inventory_Mstr where Location = '{0}' and Flag_Inactive <> 'Y'",v.Passed.000054,v.Local.sSQL)
+	f.Data.DataTable.CreateFromSQL("Parts","con",v.Local.sSQL,True)
+	F.Data.DataView.Create("Parts","Parts_DTV", 22,"", "Description")		
+	gui.Parts.gsPart.AddGridviewFromDataview("GV_Parts","Parts","Parts_DTV")
+	f.Intrinsic.Control.CallSub(format_gsparts)
+	gui.Parts.gsPart.MainView("GV_Parts")	
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Bind_Mock_Part_Browser.End
+
+Program.Sub.Format_gsParts.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.sInvisible.Declare
+	v.Local.sTabStop.Declare
+	v.Local.iCnt.Declare
+
+	'0 - None		1 - Top			2 - Bottom		4 - Left		8 - Right
+
+	'Set Anchor
+	gui.Parts.gsPart.Anchor(15)
+	gui.Parts.cmdExitParts.Anchor(9)
+	
+	'General settings
+	Gui.Parts.gsPart.SetGridViewProperty("GV_Parts","AllowSort",True)
+	Gui.Parts.gsPart.SetGridViewProperty("GV_Parts","AllowFilter",True)	
+	Gui.Parts.gsPart.SetGridViewProperty("GV_Parts","EnableAppearanceOddRow",True)
+	Gui.Parts.gsPart.SetGridViewProperty("GV_Parts","OptionsViewRowAutoHeight",True)
+	'Gui.Parts.gsPart.SetGridViewProperty("GV_Parts","OptionsViewShowAutoFilterRow",True)
+	gui.Parts.gsPart.SetGridViewProperty("GV_Parts","OptionsFindAlwaysVisible",True)
+	'Width
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Part","MinWidth","170")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Description","MinWidth","200")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Qty_OnHand","MinWidth","70")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Location","MinWidth","70")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Price","MinWidth","90")	
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","MinWidth","60")
+	'Caption
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Part","Caption","Part")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Description","Caption","Description")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Location","Caption","Location")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Qty_OnHand","Caption","On Hand")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Product_Line","Caption","PL")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","Caption","Select")
+	'EditorButton
+	gui.Parts.gsPart.ColumnEdit("GV_Parts","SelectPart","editorbutton","Select")	
+	'HeaderHAlignment
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Qty_Onhand","HeaderHAlignment","Far")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Price","HeaderHAlignment","Far")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Product_Line","HeaderHAlignment","Center")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","HeaderHAlignment","Center")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Available","HeaderHAlignment","Far")
+	'Cell Halignment
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Product_Line","CellHAlignment","Center")
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","CellHAlignment","Center")
+	'Header bold
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Part","HeaderFontBold",True)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Description","HeaderFontBold",True)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Location","HeaderFontBold",True)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Qty_OnHand","HeaderFontBold",True)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Product_Line","HeaderFontBold",True)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","HeaderFontBold",True)	
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Price","HeaderFontBold",True)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Available","HeaderFontBold",True)	
+	'For clicking select
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","AllowEdit",false)
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","SelectPart","ReadOnly",True)
+	
+	gui.Parts.gsPart.SetColumnProperty("GV_Parts","Available","ToolTip","On Hand + On Order PO + On Order WO) - Requirements")
+	
+	'TapStop on other columns
+	F.Intrinsic.String.Split("Description,Location,Qty_OnHand,Product_Line,Price,SelectPart",",",v.Local.sTabStop)
+	f.Intrinsic.Control.For(v.Local.iCnt,0,v.Local.sTabStop.UBound,1)
+		gui.Parts.gsPart.SetColumnProperty("GV_Parts",v.Local.sTabStop(v.Local.iCnt),"TabStop",False)
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Format_gsParts.End
+
+Program.Sub.Bind_Contract_Part_Pricing.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	v.Local.iCnt.Declare
+	v.Local.sComponentTable.Declare
+	v.Local.sQty.Declare
+	v.Local.sPrice.Declare
+	v.Local.sSelectedColumn.Declare
+	v.Local.sComponentString.Declare
+	v.Local.sFinalString.Declare
+	
+	f.Intrinsic.String.Build("Select a.Part, a.Location,b.Description, Date_Effective,QB_Qty_1,Price_1,QB_Qty_2,Price_2,QB_Qty_3,Price_3,QB_Qty_4,Price_4,QB_Qty_5,Price_5,QB_Qty_6,Price_6,QB_Qty_7,Price_7,QB_Qty_8,Price_8,QB_Qty_9,Price_9,QB_Qty_10,Price_10 from OE_C_PART_P_BRK a left join inventory_mstr b on a.Part = b.Part and a.Location = b.Location where Customer = '{0}' order by a.Part Asc, Date_Effective Desc",v.Global.sCustomer,v.Local.sSQL)
+	f.Data.DataTable.CreateFromSQL("CPartPrice","con",v.Local.sSQL,True)
+	f.Data.DataView.Create("CPartPrice","CPartPriceDV")
+	
+	'Convert data tables from horizontal row to vertical row
+	f.Intrinsic.Control.For(v.Local.iCnt,1,10,1)
+		f.Intrinsic.String.Build("CP{0}",v.Local.iCnt,v.Local.sComponentTable)
+		f.Intrinsic.String.Build("QB_Qty_{0}",v.Local.iCnt,v.Local.sQty)
+		f.Intrinsic.String.Build("Price_{0}",v.Local.iCnt,v.Local.sPrice)
+		f.Intrinsic.String.Build("Part*!*Location*!*Description*!*{0}*!*{1}",v.Local.sQty,v.Local.sPrice,v.Local.sSelectedColumn)		
+		f.Data.DataView.ToString("CPartPrice","CPartPriceDV",v.Local.sSelectedColumn,"*!*","@@@",v.Local.sComponentString)
+		f.Intrinsic.Control.If(v.Local.iCnt,=,1)
+			v.Local.sFinalString.Set(v.Local.sComponentString)
+		f.Intrinsic.Control.Else
+			f.Intrinsic.String.Build("{0}@@@{1}",v.Local.sFinalString,v.Local.sComponentString,v.Local.sFinalString)
+		f.Intrinsic.Control.EndIf
+		
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+	f.Data.DataTable.CreateFromString("VerticalPartPrice",v.Local.sFinalString,"Part*!*Location*!*Description*!*Qty*!*Price","String*!*String*!*String*!*Float*!*Float","*!*","@@@",True)
+	
+	f.Data.DataView.Create("VerticalPartPrice","VerticalPartPriceDV",22,"","Part,Location,Qty")
+	
+	gui.ContractPricing.gsPartPricing.AddGridviewFromDatatable("GVPrice","VerticalPartPrice")
+	
+	'Format gsPartPricing
+	Gui.ContractPricing.gsPartPricing.SetGridViewProperty("GVPrice","AllowSort",True)
+	Gui.ContractPricing.gsPartPricing.SetGridViewProperty("GVPrice","AllowFilter",True)
+	Gui.ContractPricing.gsPartPricing.SetGridViewProperty("GVPrice","OptionsFindAlwaysVisible",True)
+	Gui.ContractPricing.gsPartPricing.SetGridViewProperty("GVPrice","EnableAppearanceOddRow",True)
+	Gui.ContractPricing.gsPartPricing.SetGridViewProperty("GVPrice","OptionsViewShowAutoFilterRow",True)
+	Gui.ContractPricing.gsPartPricing.SetGridViewProperty("GVPrice","ColumnPanelRowHeight","50")
+	
+	gui.ContractPricing.gsPartPricing.SetColumnProperty("GVPrice","Part","MinWidth","170")
+	gui.ContractPricing.gsPartPricing.SetColumnProperty("GVPrice","Description","MinWidth","200")
+	gui.ContractPricing.gsPartPricing.SetColumnProperty("GVPrice","Qty","MinWidth","80")
+	gui.ContractPricing.gsPartPricing.SetColumnProperty("GVPrice","Price","MinWidth","90")
+	'HeaderHAlignment
+	gui.ContractPricing.gsPartPricing.SetColumnProperty("GVPrice","Qty","HeaderHAlignment","Far")
+	gui.ContractPricing.gsPartPricing.SetColumnProperty("GVPrice","Price","HeaderHAlignment","far")
+	
+	gui.ContractPricing.gsPartPricing.MainView("GVPrice")
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Bind_Contract_Part_Pricing.End
+
+Program.Sub.Calculate_Sum.Start
+'Calculate Total of the Quote
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sHold.Declare
+	v.Local.fSumExtension.Declare
+	v.Local.fSumAmtDiscount.Declare
+	v.Local.fGrossAmt.Declare
+	
+	F.Data.DataTable.Compute("Quote_Lines", "Sum(Extension)","",v.Local.fSumExtension)
+	f.Intrinsic.String.Format(v.Local.fSumExtension,"0.00",v.Local.sHold)	
+	
+	'Discount
+	F.Data.DataTable.Compute("Quote_Lines", "Sum(AMT_Discount)","",v.Local.fSumAmtDiscount)
+	f.Intrinsic.Math.Sub(0,v.Local.fSumAmtDiscount,v.Local.fSumAmtDiscount)
+	f.Intrinsic.String.Format(v.Local.fSumAmtDiscount,"0.00",v.Local.sHold)
+	gui.Quote.txtDiscount.Text(v.Local.sHold)
+	
+	'GrossAmt = Extension + Discount
+	f.Intrinsic.Math.Add(v.Local.fSumExtension,v.Local.fSumAmtDiscount,v.Local.fGrossAmt)
+	f.Intrinsic.Math.Add(v.Local.fGrossAmt,v.Global.fFreight,v.Local.fGrossAmt)
+	f.Intrinsic.String.Format(v.Local.fGrossAmt,"0.00",v.Local.sHold)
+	gui.Quote.txtGross.Text(v.Local.sHold)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Calculate_Sum.End
+
+Program.Sub.gsQuote_CellValueChanged.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sFilter.Declare
+	v.Local.sColumnOrignial.Declare
+	v.Local.sPartLoc.Declare
+	v.Local.sSurcharge.Declare
+	v.Local.iSurchargeRowIndex.Declare
+	v.Local.iParentLine.Declare
+	v.Local.iSurchargeRef.Declare
+	v.Local.sYesNo.Declare
+	v.Local.fQty.Declare
+	v.Local.sColumn.Declare
+	v.Local.sCheck.Declare
+	v.Local.sSurchargePartLoc.Declare
+	v.Local.sMsg.Declare
+	v.Local.sQty_Quoted.Declare
+	v.Local.fWeight.Declare	
+	v.Local.sPrice.Declare	
+	v.Local.dDate.Declare
+	v.Local.sDate.Declare
+	v.Local.sHold.Declare		
+	
+	f.Intrinsic.String.UCase(v.Args.Column,v.Local.sColumn)
+	
+	'Check if an old row. If it is, will prevent from modifying
+	f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Args.RowIndex).Old_New!FieldValTrim,=,"Old")
+		f.Intrinsic.UI.Msgbox("Old Line cannot be changed. Only standard Lines screen can modify.","Attention")
+		'Set back previous value
+		F.Intrinsic.String.Build("{0}Original",v.Local.sColumn,v.Local.sColumnOrignial)
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.RowIndex,v.Local.sColumn,v.DataTable.Quote_Lines(v.Args.RowIndex).[v.Local.sColumnOrignial]!FieldValString)
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	'Get index and Part to be used in Part browser screen back and forth
+	v.Global.iRowIndex.Set(v.Args.RowIndex)
+	gui.Parts.txtPart.Text(v.DataTable.Quote_Lines(v.Args.RowIndex).Part!FieldValTrim)
+	
+	'Input in Part column
+	f.Intrinsic.Control.If(v.Local.sColumn,=,"DESCRIPTION")
+	
+		'input is not empty => move on
+		f.Intrinsic.String.Build("DESCRIPTION like '{0}*'",v.DataTable.Quote_Lines(v.Args.RowIndex).DESCRIPTION!FieldValTrim,v.Local.sFilter)
+		F.Data.DataView.SetFilter("Parts","Parts_DTV",v.Local.sFilter)		
+		
+		f.Intrinsic.Control.If(V.DataView.Parts!Parts_DTV.RowCount,=,1) 
+			v.Global.bChange.Set(True)
+			f.Intrinsic.String.Build("{0}-{1}",V.DataView.Parts!Parts_DTV(0).Part!FieldValString,V.DataView.Parts!Parts_DTV(0).Location!FieldValString,v.Local.sPartLoc)
+			'update everything
+			f.Data.DataTable.SetValue("Quote_Lines",v.Args.RowIndex,"Part",V.DataView.Parts!Parts_DTV(0).Part!FieldValString,"Location",V.DataView.Parts!Parts_DTV(0).Location!FieldValString,"Text_Info2",v.Dictionary.SurchargePartDict![v.Local.sPartLoc],"Part_Validation","Valid")
+			f.Intrinsic.Control.CallSub(update_fields,"sPart",v.DataTable.Quote_Lines(v.Args.RowIndex).Part!FieldValString,"sLocation",v.DataTable.Quote_Lines(v.Args.RowIndex).Location!FieldValString,"iRowIndex",v.Args.RowIndex)				
+			f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Args.RowIndex)
+			
+			'Prepare to set Surcharge		
+			v.Local.iParentLine.Set(v.DataTable.Quote_Lines(v.Args.RowIndex).Line!FieldValTrim)
+			f.Intrinsic.Math.Add(v.Args.RowIndex,1,v.Local.iSurchargeRowIndex)
+			f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount--,<,v.Local.iSurchargeRowIndex)
+				f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+				f.Intrinsic.Control.ExitSub
+			f.Intrinsic.Control.EndIf
+			
+			'Get Surcharge info
+			v.Local.sSurcharge.Set(v.dictionary.SurchargePartDict![v.Local.sPartLoc])	
+			'Double check if Surcharge is going with the location
+			f.Intrinsic.String.Build("{0}-{1}",v.Local.sSurcharge.Trim,V.DataView.Parts!Parts_DTV(0).Location!FieldValString,v.Local.sSurchargePartLoc)
+			v.Local.sCheck.Set(v.Dictionary.SurchargeCheckLocDict![v.Local.sSurchargePartLoc])
+			'If Surcharge does not exist or go with the location
+			f.Intrinsic.Control.If(v.Local.sSurcharge.Trim,=,"",or,v.Local.sCheck.Trim,=,"")
+				f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Part","","Location","","Description","","Text_Info2","","Part_Validation","Not Valid")
+				f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+				f.Intrinsic.Control.ExitSub
+			f.Intrinsic.Control.EndIf	
+			
+			'Set surcharge
+			v.Local.iSurchargeRef.Set(v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).LineRef!FieldValTrim)
+			f.Intrinsic.Control.If(v.Local.iParentLine,=,v.Local.iSurchargeRef,and,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Type!FieldValTrim,=,"SUR")
+				f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Part",v.Local.sSurcharge,"Location",V.DataView.Parts!Parts_DTV(0).Location!FieldValString,"Part_Validation","Valid")
+				f.Intrinsic.Control.CallSub(update_fields,"sPart",V.Local.sSurcharge,"sLocation",v.DataTable.Quote_Lines(v.Args.RowIndex).Location!FieldValString,"iRowIndex",v.Local.iSurchargeRowIndex)				
+				f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Local.iSurchargeRowIndex)
+			f.Intrinsic.Control.EndIf
+			f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+			f.Intrinsic.Control.ExitSub		
+		f.Intrinsic.Control.EndIf
+		
+		'More than 1 Part exists
+		f.Intrinsic.Control.If(V.DataView.Parts!Parts_DTV.RowCount,>,1)			
+			F.Data.DataView.SetSort("Parts","Parts_DTV","Description ASC")			
+		'If No Part exists
+		f.Intrinsic.Control.ElseIf(V.DataView.Parts!Parts_DTV.RowCount,=,0) 
+			f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+		f.Intrinsic.Control.EndIf
+		
+		Gui.Quote..Enabled(False)
+		gui.Parts..Visible(True)
+		
+		Gui.Parts.gsPart.SetFocus
+		
+	
+	'Input in Quantity
+	f.Intrinsic.Control.ElseIf(v.Local.sColumn,=,"QTY_QUOTED")	
+		'Set Contract Part Pricing
+		f.Intrinsic.String.Build("Part = '{0}' and Location = '{1}' and Qty <= {2}",v.DataTable.Quote_Lines(v.Args.RowIndex).Part!FieldValString,v.DataTable.Quote_Lines(v.Args.RowIndex).Location!FieldValString,v.DataTable.Quote_Lines(v.Args.RowIndex).Qty_Quoted!FieldValString,v.Local.sFilter)
+		f.Data.DataView.SetFilter("VerticalPartPrice","VerticalPartPriceDV",v.Local.sFilter)
+		f.Data.DataView.SetSort("VerticalPartPrice","VerticalPartPriceDV","Qty Desc")
+		f.Intrinsic.Control.If(v.DataView.VerticalPartPrice!VerticalPartPriceDV.RowCount,>,0)
+			f.Data.DataTable.SetValue("Quote_Lines",v.Args.RowIndex,"Price",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString,"Price_LB",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString,"Price_LB_Quote",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString)
+		f.Intrinsic.Control.EndIf
+
+		'Set the Weight
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Args.RowIndex).UM_Inventory!FieldValTrim,=,"LB")
+			Gui.Quote.gsQuote.GetCellValueByColumnName("GV_Quote_Lines","Qty_Quoted",v.Args.RowIndex,V.Local.sQty_Quoted)
+			v.Local.fWeight.Set(v.Local.sQty_Quoted)
+		f.Intrinsic.Control.Else
+			v.Local.fWeight.Set(0)
+		f.Intrinsic.Control.EndIf
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.RowIndex,"Weight",v.Local.fWeight)	
+	
+		f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Args.RowIndex)		
+		'Set Surcharge qty
+		v.Local.fQty.Set(v.DataTable.Quote_Lines(v.Args.RowIndex).Qty_Quoted!FieldValString)
+		f.Intrinsic.String.Build("{0}-{1}",V.DataView.Parts!Parts_DTV(0).Part!FieldValString,V.DataView.Parts!Parts_DTV(0).Location!FieldValString,v.Local.sPartLoc)
+		
+		v.Local.iParentLine.Set(v.DataTable.Quote_Lines(v.Args.RowIndex).Line!FieldValTrim)
+		'Get LineRef of Surcharge
+		f.Intrinsic.Math.Add(v.Args.RowIndex,1,v.Local.iSurchargeRowIndex)
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount--,<,v.Local.iSurchargeRowIndex)
+			f.Intrinsic.Control.ExitSub
+		f.Intrinsic.Control.EndIf					
+		v.Local.iSurchargeRef.Set(v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).LineRef!FieldValTrim)
+		
+		f.Intrinsic.Control.If(v.Local.iParentLine,=,v.Local.iSurchargeRef,and,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Type!FieldValTrim,=,"SUR")
+			f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Qty_Quoted",v.Local.fQty)	
+			
+			'Set Weight
+			f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Args.RowIndex).UM_Inventory!FieldValTrim,=,"LB")
+				Gui.Quote.gsQuote.GetCellValueByColumnName("GV_Quote_Lines","Qty_Quoted",v.local.iSurchargeRowIndex,V.Local.sQty_Quoted)
+				v.Local.fWeight.Set(v.Local.sQty_Quoted)
+			f.Intrinsic.Control.Else
+				v.Local.fWeight.Set(0)
+			f.Intrinsic.Control.EndIf
+			f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Weight",v.Local.fWeight)				
+			
+			'Set Contract Part Pricing for the Surcharge
+			f.Intrinsic.String.Build("Part = '{0}' and Location = '{1}' and Qty <= {2}",v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Part!FieldValString,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Location!FieldValString,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Qty_Quoted!FieldValString,v.Local.sFilter)
+			f.Data.DataView.SetFilter("VerticalPartPrice","VerticalPartPriceDV",v.Local.sFilter)
+			f.Data.DataView.SetSort("VerticalPartPrice","VerticalPartPriceDV","Qty Desc")
+			f.Intrinsic.Control.If(v.DataView.VerticalPartPrice!VerticalPartPriceDV.RowCount,>,0)
+				f.Data.DataTable.SetValue("Quote_Lines",v.Local.iSurchargeRowIndex,"Price",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString,"Price_LB",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString,"Price_LB_Quote",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString)
+			f.Intrinsic.Control.EndIf				
+			f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Local.iSurchargeRowIndex)
+		f.Intrinsic.Control.EndIf
+		
+		v.Global.bChange.Set(True)
+
+	'Input in PRICE
+	f.Intrinsic.Control.ElseIf(v.Local.sColumn,=,"PRICE")
+		f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Args.RowIndex)
+		v.Global.bChange.Set(True)
+		Gui.Quote.gsQuote.GetCellValueByColumnName("GV_Quote_Lines","Price",v.Args.RowIndex,V.Local.sPrice)
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.RowIndex,"Price_LB",v.Local.sPrice,"Price_LB_Quote",v.Local.sPrice)
+		
+	f.Intrinsic.Control.ElseIf(v.Local.sColumn,=,"DATEITEMPROM")
+	
+		Gui.Quote.gsQuote.GetCellValueByColumnName("GV_Quote_Lines","DATEITEMPROM",v.Args.RowIndex,V.Local.sDate)
+		v.Local.dDate.Set(v.Local.sDate)
+		f.Intrinsic.String.Mid(v.Local.dDate.FormatYYYYMMDD,3,2,v.Local.sHold)
+		v.Local.sDate.Set(v.Local.dDate.FormatYYYYMMDD)
+		f.Intrinsic.String.Build("{0}{1}",v.Local.sDate.right4,v.Local.sHold,v.Local.sDate)
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.RowIndex,"Date_Item_Prom",v.Local.dDate.FormatYYYYMMDD,"Item_Promise_DT",v.Local.sDate)
+		
+		'Get Surcharge Date Item Prom changed
+		v.Local.iParentLine.Set(v.DataTable.Quote_Lines(v.Args.RowIndex).Line!FieldValTrim)
+		'Get LineRef of Surcharge
+		f.Intrinsic.Math.Add(v.Args.RowIndex,1,v.Local.iSurchargeRowIndex)
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount--,<,v.Local.iSurchargeRowIndex)
+			f.Intrinsic.Control.ExitSub
+		f.Intrinsic.Control.EndIf					
+		v.Local.iSurchargeRef.Set(v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).LineRef!FieldValTrim)
+		
+		f.Intrinsic.Control.If(v.Local.iParentLine,=,v.Local.iSurchargeRef,and,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Type!FieldValTrim,=,"SUR")
+			f.Data.DataTable.SetValue("Quote_Lines",v.Local.iSurchargeRowIndex,"DateItemProm",v.Local.dDate,"Date_Item_Prom",v.Local.dDate.FormatYYYYMMDD,"Item_Promise_DT",v.Local.sDate)	
+		f.Intrinsic.Control.EndIf				
+		v.Global.bChange.Set(True)
+		
+	'Input in DISCOUNT
+	f.Intrinsic.Control.ElseIf(v.Local.sColumn,=,"DISCOUNT")	
+		f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Args.RowIndex)
+		v.Global.bChange.Set(True)
+	f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.gsQuote_CellValueChanged.End
+
+Program.Sub.Update_Fields.Start
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	v.Local.iCnt.Declare
+	v.Local.sProductLine.Declare
+	v.Local.sGLAccount.Declare
+	v.Local.sFilter.Declare
+	v.Local.fWeight.Declare
+	v.Local.sItemPromiseDate.Declare
+	v.Local.sQty_Quoted.Declare
+	v.Local.sDate.Declare
+	v.Local.sDate2.Declare	
+	V.Local.sRet.Declare
+	v.Local.fAmt_Price.Declare
+	v.Local.fCost.Declare
+	
+	
+	v.Local.sDate.Set(v.Ambient.Date.FormatYYYYMMDD)
+	f.Intrinsic.String.Mid(v.local.sDate,3,2,v.Local.sItemPromiseDate)
+	f.Intrinsic.String.Build("{0}{1}",v.local.sDate.right4,v.Local.sItemPromiseDate,v.Local.sItemPromiseDate)
+	f.Intrinsic.String.Format(v.Ambient.Date,"MM-DD-YYYY",v.Local.sDate2)
+	
+	'(Additional fields need to be updated: Weight,Cost,Price_LB,Price_LB_Quote,Price_Bom_Comp_Flg,Flag_Always_Discount,Flag_Bom,Add_By_PGM,Date_Quote,Date_Item_Prom,Item_Promise_Dt,Add_By_Date,Add_By_Time)
+	
+	'Arguments: sPart, sLocation, iRowIndex
+	
+	'Update: PART,DESCRIPTION,LOCATION,Product_Line,UM_INVENTORY,Price,UM_QUOTE,COST,CUSTOMER_PART, Code_sort
+	'Customer_Part
+	f.Intrinsic.String.Build("Select Top 1 PART,DESCRIPTION,LOCATION,Product_Line,UM_INVENTORY,AMT_PRICE, CODE_SORT from Inventory_mstr Where Part = '{0}' and Location = '{1}'",V.Args.sPart,v.Args.sLocation,v.Local.sSQL)
+	F.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+	F.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.Not)	
+		f.Intrinsic.String.Split(v.Local.sRet,"*!*",v.Local.sRet)
+		f.Intrinsic.Control.If(v.Local.sRet(4).Trim,=,"LB")
+			Gui.Quote.gsQuote.GetCellValueByColumnName("GV_Quote_Lines","Qty_Quoted",v.Args.iRowIndex,V.Local.sQty_Quoted)
+			v.Local.fWeight.Set(v.Local.sQty_Quoted)
+		f.Intrinsic.Control.Else
+			v.Local.fWeight.Set(0)
+		f.Intrinsic.Control.EndIf
+		v.Local.sProductLine.Set(v.Local.sRet(3).Trim)
+		v.Local.sGLAccount.Set(v.Dictionary.PLDict![v.Local.sProductLine])
+		v.Local.fAmt_Price.Set(v.Local.sRet(5))
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Description",v.Local.sRet(1),"Product_Line",v.Local.sProductLine,"UM_Quote",v.Local.sRet(4).Trim,"UM_Inventory",v.Local.sRet(4).Trim,"Price",v.local.fAmt_Price,"Price_LB",v.local.fAmt_Price,"Price_LB_Quote",v.local.fAmt_Price,"GL_Account",v.Local.sGLAccount,"Weight",v.Local.fWeight,"Date_Quote",v.Global.sDateQuote,"Date_Item_Prom",v.Local.sDate,"Add_By_Date",v.Local.sDate,"Item_Promise_DT",v.Local.sItemPromiseDate,"Add_By_PGM","UPLQUOTE","DateItemProm",v.Local.sDate2)
+	F.Intrinsic.Control.EndIf
+
+	'Cost
+	f.Intrinsic.String.Build("Select Top 1 Cost from Inventory_Cost Where Part = '{0}' and Locn = '{1}'",V.Args.sPart,v.Args.sLocation,v.Local.sSQL)
+	F.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+	F.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.Not)	
+		v.Local.fCost.Set(v.Local.sRet)
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Cost",v.Local.fCost)
+	F.Intrinsic.Control.EndIf
+	
+	'Customer Part
+	f.Intrinsic.String.Build("select top 1 Customer_Part from Inv_Cross_Ref where Customer = '{0}' and Part = '{1}' and Location = '{2}'",v.Global.sCustomer,V.Args.sPart,v.Args.sLocation,v.Local.sSQL)
+	F.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+	F.Intrinsic.Control.If(v.Ambient.ExecuteAndReturnEOF.Not)
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Customer_Part",v.Local.sRet)
+	F.Intrinsic.Control.EndIf	
+		
+	'Set Contract Part Pricing
+	f.Intrinsic.String.Build("Part = '{0}' and Location = '{1}' and Qty <= {2}",v.Args.sPart,v.Args.sLocation,v.DataTable.Quote_Lines(v.Args.iRowIndex).Qty_Quoted!FieldValString,v.Local.sFilter)
+	f.Data.DataView.SetFilter("VerticalPartPrice","VerticalPartPriceDV",v.Local.sFilter)
+	f.Data.DataView.SetSort("VerticalPartPrice","VerticalPartPriceDV","Qty Desc")
+	f.Intrinsic.Control.If(v.DataView.VerticalPartPrice!VerticalPartPriceDV.RowCount,>,0)
+		f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Price",v.DataView.VerticalPartPrice!VerticalPartPriceDV(0).Price!FieldValString)
+	f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Update_Fields.End
+
+Program.Sub.Calculate_Extension.Start
+F.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sHold.Declare
+	v.Local.fExtension.Declare
+	v.Local.fExtentionNonDiscount.Declare
+	v.Local.fDiscount_AMT_per_1.Declare
+	v.Local.fDiscount_Price.Declare
+	v.Local.fAMT_Discount.Declare
+	v.Local.fPrice.Declare
+	v.Local.fDiscountPercentage.Declare
+	v.Local.fQty.Declare
+	v.Local.fSumExtension.Declare
+	
+	'Get values
+	V.Local.fPrice.Set(v.DataTable.Quote_Lines(v.Args.iRowIndex).Price!FieldvalString)
+	v.Local.fDiscountPercentage.Set(v.DataTable.Quote_Lines(v.Args.iRowIndex).Discount!FieldvalString)
+	v.Local.fQty.Set(v.DataTable.Quote_Lines(v.Args.iRowIndex).Qty_Quoted!FieldvalString)
+	
+	'Calculate Discount AMOUNT per 1 = Price * Discount percentage
+	f.Intrinsic.Math.Mult(v.Local.fPrice,v.Local.fDiscountPercentage,v.Local.fDiscount_AMT_per_1)
+	f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Discount_Amt_Per_1",v.Local.fDiscount_AMT_per_1)
+	
+	'Calculate Discount Price = Price - Discount_AMT_per_1
+	f.Intrinsic.Math.Sub(v.Local.fPrice,v.Local.fDiscount_AMT_per_1,v.Local.fDiscount_Price)
+	f.Intrinsic.String.Format(v.Local.fDiscount_Price,"0.000000",v.Local.sHold)
+	f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Discount_Price",v.Local.sHold)
+	
+	'Calculate Extension = Qty * Discount_Price
+	f.Intrinsic.Math.Mult(v.Local.fQty,v.Local.fDiscount_Price,v.Local.fExtension)
+	f.Intrinsic.String.Format(v.Local.fExtension,"0.00",v.Local.sHold)
+	f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"Extension",v.Local.sHold)
+	
+	'Calculate ExtensionNonDiscount = Qty * Price
+	f.Intrinsic.Math.Mult(v.Local.fQty,v.Local.fPrice,v.Local.fExtentionNonDiscount)
+	
+	'Calculate AMT_Discount = ExtentionNonDiscount - Extension
+	f.Intrinsic.Math.Sub(v.Local.fExtentionNonDiscount,v.Local.fExtension,v.Local.fAMT_Discount)
+	f.Intrinsic.Math.Sub(0,v.Local.fAMT_Discount,v.Local.fAMT_Discount)
+	f.Intrinsic.String.Format(v.Local.fAMT_Discount,"0.00",v.Local.sHold)
+	f.Data.DataTable.SetValue("Quote_Lines",v.Args.iRowIndex,"AMT_Discount",v.Local.sHold)
+	
+	'Calculate the total of the Quote
+	f.Intrinsic.Control.CallSub(calculate_sum)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Calculate_Extension.End
+
+Program.Sub.cmdExitParts_Click.Start
+f.Intrinsic.Control.CallSub(parts_selection,"Selected","False")
+Program.Sub.cmdExitParts_Click.End
+
+Program.Sub.Parts_UnLoad.Start
+f.Intrinsic.Control.CallSub(parts_selection,"Selected","False")
+Program.Sub.Parts_UnLoad.End
+
+Program.Sub.Parts_Selection.Start
+f.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.iSurchargeRowIndex.Declare
+	v.Local.iParentLine.Declare
+	v.Local.sPartLoc.Declare
+
+	gui.Parts..Visible(False)
+	Gui.Quote..Enabled(True)
+	
+	f.Intrinsic.Control.If(v.Args.Selected,<>,"True")
+		'No part is selected. Set Part in gsQuote to blank
+		f.Data.DataTable.SetValue("Quote_Lines",V.Global.iRowIndex,"Part","","Description","","Text_Info2","","Part_Validation","Not Valid")	
+		
+		'Set Surcharge to blank	
+		v.Local.iParentLine.Set(v.DataTable.Quote_Lines(v.Global.iRowIndex).Line!FieldValTrim)
+		f.Intrinsic.Math.Add(v.Global.iRowIndex,1,v.Local.iSurchargeRowIndex)
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount--,>=,v.Local.iSurchargeRowIndex)			
+			f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Part","","Location","","Description","","Text_Info2","","Part_Validation","Not Valid")	
+		f.Intrinsic.Control.EndIf		
+		v.Global.bChange.Set(True)
+	f.Intrinsic.Control.EndIf
+
+	'Set Available qty
+	'Parent
+	f.Intrinsic.String.Build("{0}-{1}",v.DataTable.Quote_Lines(v.Global.iRowIndex).Part!FieldValString,v.DataTable.Quote_Lines(v.Global.iRowIndex).Location!FieldValString,v.Local.sPartLoc)
+	f.Data.Datatable.SetValue("Quote_Lines",v.Global.iRowIndex,"AvailQty",v.Dictionary.dictAvail![v.Local.sPartLoc])
+	'Surcharge
+	f.Intrinsic.Math.Add(v.Global.iRowIndex,1,v.Local.iSurchargeRowIndex)
+	f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount--,>=,v.Local.iSurchargeRowIndex)
+		f.Intrinsic.String.RPad(v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Part!FieldValString," ",20,v.Local.sPartLoc)
+		f.Intrinsic.String.Build("{0}-{1}",v.Local.sPartLoc,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Location!FieldValString,v.Local.sPartLoc)
+		f.Data.Datatable.SetValue("Quote_Lines",v.Local.iSurchargeRowIndex,"AvailQty",v.Dictionary.dictAvail![v.Local.sPartLoc])
+	f.Intrinsic.Control.EndIf	
+	
+	f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+	gui.Quote.gsQuote.SetFocus	
+	Gui.Quote.gsQuote.FocusCell("GV_Quote_Lines",V.Global.iRowIndex,3)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)02
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Parts_Selection.End
+
+Program.Sub.gsParts_KeyPress.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.sPartLoc.Declare
+	v.Local.sSurcharge.Declare
+	v.Local.iSurchargeRowIndex.Declare
+	v.Local.iParentLine.Declare
+	v.Local.iSurchargeRef.Declare
+	v.Local.sYesNo.Declare
+	v.Local.sSurchargePartLoc.Declare
+	v.Local.sCheck.Declare
+	
+	v.Global.bChange.Set(True)
+	
+	'Set Main Part
+	f.Intrinsic.String.Build("{0}-{1}",v.DataTable.Parts(v.Args.RowIndex).Part!FieldValString,v.DataTable.Parts(v.Args.RowIndex).Location!FieldValString,v.Local.sPartLoc)
+	f.Data.DataTable.SetValue("Quote_Lines",v.Global.iRowIndex,"Part",v.DataTable.Parts(v.Args.RowIndex).Part!FieldValString,"Location",v.DataTable.Parts(v.Args.RowIndex).Location!FieldValString,"Text_Info2",v.Dictionary.SurchargePartDict![v.Local.sPartLoc],"Part_Validation","Valid")
+	f.Intrinsic.Control.CallSub(update_fields,"sPart",v.DataTable.Quote_Lines(v.Global.iRowIndex).Part!FieldValString,"sLocation",v.DataTable.Quote_Lines(v.Global.iRowIndex).Location!FieldValString,"iRowIndex",v.Global.iRowIndex)				
+	f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Global.iRowIndex)
+
+	'Prepare to set Surcharge	
+	v.Local.iParentLine.Set(v.DataTable.Quote_Lines(v.Global.iRowIndex).Line!FieldValTrim)
+	f.Intrinsic.Math.Add(v.Global.iRowIndex,1,v.Local.iSurchargeRowIndex)	
+	f.Intrinsic.Control.If(v.DataTable.Quote_Lines.RowCount--,<,v.Local.iSurchargeRowIndex)
+		f.Intrinsic.Control.CallSub(parts_selection,"Selected","True")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	'Get surcharge info
+	v.Local.sSurcharge.Set(v.dictionary.SurchargePartDict![v.Local.sPartLoc])
+	'Double check if Surcharge is going with the location
+	f.Intrinsic.String.Build("{0}-{1}",v.Local.sSurcharge.Trim,v.DataTable.Parts(v.Args.RowIndex).Location!FieldValString,v.Local.sSurchargePartLoc)
+	v.Local.sCheck.Set(v.Dictionary.SurchargeCheckLocDict![v.Local.sSurchargePartLoc])					
+	'If Surcharge does not exist or go with the location					
+	f.Intrinsic.Control.If(v.Local.sSurcharge.Trim,=,"",or,v.Local.sCheck.Trim,=,"")
+		f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Part","","Location","","Description","","Text_Info2","","Part_Validation","Not Valid")
+		f.Intrinsic.Control.CallSub(parts_selection,"Selected","True")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf		
+
+	v.Local.iSurchargeRef.Set(v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).LineRef!FieldValTrim)	
+	f.Intrinsic.Control.If(v.Local.iParentLine,=,v.Local.iSurchargeRef,and,v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Type!FieldValTrim,=,"SUR")
+		f.Data.DataTable.SetValue("Quote_Lines",v.local.iSurchargeRowIndex,"Part",v.Local.sSurcharge,"Location",v.DataTable.Parts(v.Args.RowIndex).Location!FieldValString,"Part_Validation","Valid")
+		f.Intrinsic.Control.CallSub(update_fields,"sPart",V.Local.sSurcharge,"sLocation",v.DataTable.Quote_Lines(v.Global.iRowIndex).Location!FieldValString,"iRowIndex",v.Local.iSurchargeRowIndex)		
+		f.Intrinsic.Control.CallSub(calculate_extension,"iRowIndex",v.Local.iSurchargeRowIndex)
+	f.Intrinsic.Control.EndIf	
+	
+	f.Intrinsic.Control.CallSub(parts_selection,"Selected","True")	
+	
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.gsParts_KeyPress.End
+
+Program.Sub.gsPart_RowCellClick.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.sColumn.Declare
+	
+	f.Intrinsic.String.UCase(v.Args.Column,v.Local.sColumn)
+
+	F.Intrinsic.Control.If(V.local.sColumn,=,"SELECTPART")
+		F.Intrinsic.Control.CallSub("gsParts_KeyPress","RowIndex",v.Args.RowIndex)		
+	Function.Intrinsic.Control.EndIf
+	
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.gsPart_RowCellClick.End
+
+Program.Sub.cmdAddLine_Click.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare
+	v.Local.iAddedRow.Declare
+	v.Local.sMaxLine.Declare
+	v.Local.sLineRef.Declare
+	v.Local.sFocusRow.Declare
+	
+	f.Data.DataTable.Compute("Quote_Lines","Max([Line])","",v.Local.sMaxLine)
+	f.Intrinsic.Math.Add(v.Local.sMaxLine,1,v.Local.iAddedRow)
+	'Add Main Part line
+	f.Data.DataTable.AddRow("Quote_Lines","Line",v.Local.iAddedRow,"QTY_QUOTED","1.0000","Discount",v.Global.sDiscount,"Old_New","New","Remove","Remove","Part_Validation","Not valid")
+	f.Intrinsic.String.LPad(v.Local.iaddedRow,"0",3,v.Local.sLineRef)
+	'Add Surcharge line
+	f.Intrinsic.Math.Add(v.Local.iAddedRow,1,v.Local.iAddedRow)
+	f.Data.DataTable.AddRow("Quote_Lines","Line",v.Local.iAddedRow,"Type","SUR","QTY_QUOTED","1.0000","Discount",v.Global.sDiscount,"LineRef",v.Local.sLineRef,"Old_New","New","Remove","","Part_Validation","Not valid")
+	f.Intrinsic.Math.Sub(v.DataTable.Quote_Lines.Rowcount--,1,v.Local.sFocusRow)
+	Gui.Quote.gsQuote.FocusCell("GV_Quote_Lines",v.Local.sFocusRow, 3) 
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdAddLine_Click.End
+
+Program.Sub.gsQuote_RowCellClick.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sSQL.Declare
+	v.Local.sColumn.Declare
+	v.Local.sHold.Declare
+	v.Local.iFlag.Declare
+	v.Local.iParentRowIndex.Declare
+	v.Local.iSurchargeRowIndex.Declare
+	v.Local.iCnt.Declare
+	v.Local.iCurrentLine.Declare
+
+	f.Intrinsic.String.UCase(v.Args.column,v.Local.sColumn)
+	F.Intrinsic.Control.If(V.Local.sColumn,=,"REMOVE")
+		F.Intrinsic.Control.If(V.DataTable.Quote_Lines(V.Args.RowIndex).Remove!FieldValString,=,"Remove")
+			f.Intrinsic.String.Concat("Do you want to delete Line ",v.DataTable.Quote_Lines(v.Args.RowIndex).Line!FieldValString," ?",v.Local.sHold)
+			Function.Intrinsic.UI.MsgBox (v.Local.sHold, "Delete confirmation",3,v.Local.iFlag)
+				f.Intrinsic.Control.If(v.Local.iFlag,=,6)				
+					v.Local.iParentRowIndex.Set(v.Args.RowIndex)
+					f.Intrinsic.Math.Add(v.Local.iParentRowIndex,1,v.Local.iSurchargeRowIndex)
+					f.Intrinsic.Control.If(v.Local.iSurchargeRowIndex,<,v.DataTable.Quote_Lines.RowCount)
+						f.Data.DataTable.DeleteRow("Quote_Lines",v.Local.iSurchargeRowIndex)
+					f.Intrinsic.Control.EndIf				
+					f.Data.DataTable.DeleteRow("Quote_Lines",v.Local.iParentRowIndex)
+					f.Data.DataTable.AcceptChanges("Quote_Lines")				
+					v.Global.bChange.Set(True)
+					'Renumber Line and Reference
+					v.Local.iCurrentLine.Set(v.Global.iStartingLine)
+					f.Intrinsic.Control.For(v.Local.iCnt,v.Global.iOldRows,v.DataTable.Quote_Lines.RowCount--,1)
+						f.Intrinsic.Math.Add(v.Local.iCurrentLine,1,v.Local.iCurrentLine)
+						f.Data.DataTable.SetValue("Quote_Lines",v.Local.iCnt,"Line",v.Local.iCurrentLine)
+						v.Local.iParentRowIndex.Set(v.Local.iCnt)
+						f.Intrinsic.Math.Add(v.Local.iParentRowIndex,1,v.Local.iSurchargeRowIndex)
+						f.Intrinsic.Control.If(v.Local.iSurchargeRowIndex,<,v.DataTable.Quote_Lines.RowCount)
+							f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Local.iSurchargeRowIndex).Type!FieldValString,=,"SUR")
+								f.Intrinsic.String.LPad(v.Local.iCurrentLine,"0",3,v.Local.sHold)
+								f.Data.DataTable.SetValue("Quote_Lines",v.Local.iSurchargeRowIndex,"LineRef",v.Local.sHold)					
+							f.Intrinsic.Control.EndIf
+						f.Intrinsic.Control.EndIf
+					f.Intrinsic.Control.Next(v.Local.iCnt)				
+				f.Intrinsic.Control.EndIf	
+			
+		F.Intrinsic.Control.EndIf	
+		
+	f.Intrinsic.Control.ElseIf(V.local.sColumn,=,"BRW")
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Args.RowIndex).Old_New!FieldValTrim,=,"New")
+			f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+			v.Global.iRowIndex.Set(v.Args.RowIndex)
+			gui.Quote..Enabled(False)
+			gui.Parts..Visible(True)
+		f.Intrinsic.Control.EndIf	
+	Function.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.gsQuote_RowCellClick.End
+
+Program.Sub.Quote_UnLoad.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.iFlag.Declare
+	
+	f.Intrinsic.Control.If(v.Global.bChange)
+		Function.Intrinsic.UI.MsgBox ("Do you want to save changes?", "Upload", 3,v.Local.iFlag)
+		'Cancel button is hit
+		f.Intrinsic.Control.If(v.Local.iFlag,=,2)		
+			f.Intrinsic.Control.ExitSub
+		
+		'No button is hit. Close Form without uploading quote lines
+		f.Intrinsic.Control.ElseIf(v.Local.iFlag,=,7)		
+			f.Intrinsic.Control.CallSub("Unload")
+		
+		'Yes button is clicked - Upload new quotelines
+		f.Intrinsic.Control.ElseIf(v.Local.iFlag,=,6)
+			f.Intrinsic.Control.CallSub(cmdSave_Click)
+		f.Intrinsic.Control.EndIf	
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.CallSub("Unload")
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.Quote_UnLoad.End
+
+Program.Sub.cmdSave_Click.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sLine.Declare
+	v.Local.sSQL.Declare
+	v.Local.sHold.Declare
+	v.Local.sFile.Declare
+	v.Local.sFullText.Declare
+	v.Local.sMargin.Declare
+	v.Local.sRecord_No.Declare
+	v.Local.sFlagDiscount.Declare
+	v.Local.sUM.Declare
+	v.Local.iCnt.Declare
+	v.Local.iFlag.Declare
+	v.Local.fHold.Declare
+	v.Local.iInner.Declare
+	v.Local.sRet.Declare
+	v.Local.sUser1.Declare
+	v.Local.sUser2.Declare
+	v.Local.sUser3.Declare
+	v.Local.sUser4.Declare	
+	v.Local.sUser.Declare	
+	v.Local.sNoUserFields.Declare
+	v.Local.sInfo2.Declare
+	v.Local.sPartLoc.Declare
+	v.Local.sLotbin.Declare
+	v.Local.s30blank.Declare
+	v.Local.sMsg.Declare
+	v.Local.bMsg.Declare
+	
+	f.Intrinsic.String.RPad(""," ",30,v.Local.s30blank)
+	v.Local.sMsg.Set("No User Fields populated for parts: ")
+
+	F.Intrinsic.UI.InvokeWaitDialog("Processing...","Upload")
+	f.Intrinsic.Control.If(v.DataView.Quote_Lines!Quote_LinesDV.Exists)
+		f.Data.DataView.Close("Quote_Lines","Quote_LinesDV")
+	f.Intrinsic.Control.EndIf				
+	f.Data.DataView.Create("Quote_Lines","Quote_LinesDV",22,"Old_New = 'New' and Part_Validation = 'Valid'","")
+	f.Intrinsic.Control.If(v.DataView.Quote_Lines!Quote_LinesDV.RowCount,<=,0)
+		f.Intrinsic.UI.CloseWaitDialog
+		f.Intrinsic.UI.Msgbox("No line to be uploaded.","Attention")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf			
+	
+	f.Intrinsic.Control.For(v.Local.iCnt,v.Global.iStartingLine,v.DataTable.Quote_Lines.RowCount--,1)
+		'Skip the Not Valid Part
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Local.iCnt).Part_Validation!fieldValTrim,=,"Valid")			
+			'Quote Number 1-7 7
+			v.Local.sLine.Set(v.Global.sQuote)
+			
+			'Line number 8-10 3
+			f.Intrinsic.String.LPad(v.DataTable.Quote_Lines(v.Local.iCnt).Line!FieldValString,"0",3,v.Local.sHold)
+			F.Intrinsic.String.Concat(V.Local.sLine,v.Local.sHold,V.Local.sLine)
+			'Record Type 11-11 1
+			F.Intrinsic.String.Concat(V.Local.sLine,"L",V.Local.sLine)
+			
+			'Customer 12-17 6
+			f.Intrinsic.String.RPad(v.Global.sCustomer," ",6,v.Local.sHold)
+			F.Intrinsic.String.Concat(V.Local.sLine,v.Local.sHold,V.Local.sLine)
+						
+			'Customer Ship-To ID 18-23 6
+			f.Intrinsic.String.RPad(v.Global.sShipID," ",6,v.Local.sHold)
+			F.Intrinsic.String.Concat(V.Local.sLine,v.Local.sHold,V.Local.sLine) 
+			
+			'Type S 24-24
+			F.Intrinsic.String.Concat(V.Local.sLine,"S",V.Local.sLine)
+			
+			'Quantity Ordered 9.4 25-43 19
+			f.Intrinsic.String.Format(v.DataTable.Quote_Lines(v.Local.iCnt).QTY_QUOTED!FieldValFloat,"0.0000",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Unit of Measure 60-61 2
+			f.Intrinsic.String.RPad(v.Local.sLine," ",59,v.Local.sLine)
+			v.Local.sUM.Set(v.DataTable.Quote_Lines(v.Local.iCnt).UM_Quote!FieldValString)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sUM.left2,v.Local.sLine)
+			
+			'Part number 62-81 20
+			f.Intrinsic.String.RPad(v.DataTable.Quote_Lines(v.Local.iCnt).Part!FieldValString," ",20,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Quote Won or Loss 82-82 1
+			f.Intrinsic.String.Concat(v.Local.sLine,v.DataTable.Quote_Lines(v.Local.iCnt).Quote_Won!FieldValString,v.Local.sLine)
+				
+			'Price 10.6 83-101 19
+			f.Intrinsic.String.Format(v.DataTable.Quote_Lines(v.Local.iCnt).Price!FieldValFloat,"0.000000",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Cost 10.6 102-120 19
+			f.Intrinsic.String.Format(v.DataTable.Quote_Lines(v.Local.iCnt).Cost!FieldValFloat,"0.000000",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Sort Code 121-132 12
+			f.Intrinsic.String.Concat(v.Local.sLine,v.DataTable.Quote_Lines(v.Local.iCnt).CODE_SORT!FieldValString,v.Local.sLine)
+						
+			'Part Description 133-162 30
+			f.Intrinsic.String.RPad(v.Local.sLine," ",132,v.Local.sLine)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.DataTable.Quote_Lines(v.Local.iCnt).Description!FieldValString,v.Local.sLine)
+			 		
+			'Part Location 313-314 2
+			f.Intrinsic.String.RPad(v.Local.sLine," ",312,v.Local.sLine)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.DataTable.Quote_Lines(v.Local.iCnt).Location!FieldValString,v.Local.sLine)
+			
+			'Quote (Order) Discount Percentage 1.4 334-349 16
+			f.Intrinsic.String.RPad(v.Local.sLine," ",333,v.Local.sLine)
+			v.Local.fhold.Set(v.DataTable.Quote_Lines(v.Local.iCnt).Discount!FieldValString)
+			f.Intrinsic.Math.Mult(v.Local.fhold,100,v.Local.fHold)
+			f.Intrinsic.String.Format(v.Local.fHold,"0.0000",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",16,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Normal GL Account 372-386 15 (Only 10-characters can be used at this time.)
+			f.Intrinsic.String.RPad(v.Local.sLine," ",371,v.Local.sLine)
+			f.Intrinsic.String.RPad(v.DataTable.Quote_Lines(v.Local.iCnt).GL_Account!FieldValString," ",15,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Order Date CCYYMMDD 462-469 8
+
+			'Item Promise Date MMDDYY 470-475 6 
+			
+			'Customer Part Number 477-508 32
+			f.Intrinsic.String.RPad(v.Local.sLine," ",476,v.Local.sLine)
+			f.Intrinsic.String.RPad(v.DataTable.Quote_Lines(v.Local.iCnt).Customer_Part!FieldValTrim," ",32,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+						
+			'Order Currency Code 549-551 3
+			f.Intrinsic.String.RPad(v.Local.sLine," ",548,v.Local.sLine)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Global.sQuoteCurrency,v.Local.sLine)
+			
+			'Extended Price (Extension) 14.2 552-570 19
+			f.Intrinsic.String.RPad(v.Local.sLine," ",551,v.Local.sLine)
+			f.Intrinsic.String.Format(v.DataTable.Quote_Lines(v.Local.iCnt).Extension!FieldValFloat,"0.00",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Product Line 576-577 2
+			f.Intrinsic.String.RPad(v.Local.sLine," ",575,v.Local.sLine)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.DataTable.Quote_Lines(v.Local.iCnt).Product_Line!FieldValString,v.Local.sLine)
+			
+			'Discount Amount 10.2 595-613 19 
+			f.Intrinsic.String.RPad(v.Local.sLine," ",594,v.Local.sLine)
+			v.Local.fHold.set(v.DataTable.Quote_Lines(v.Local.iCnt).AMT_Discount!FieldValString)
+			f.Intrinsic.String.Format(v.Local.fHold,"0.00",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+ 			
+			'Discount Price 10.2 614-632 19 - This is the actual price the part is sold for after all discounts have been applied.
+			v.Local.fHold.set(v.DataTable.Quote_Lines(v.Local.iCnt).Discount_Price!FieldValString)
+			f.Intrinsic.String.Format(v.Local.fHold,"0.0000",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+			
+			'Quote (Order) Discount Amount 10.2 633-651 19
+			 f.Intrinsic.String.RPad(v.Local.sLine," ",632,v.Local.sLine)
+			v.Local.fHold.set(v.DataTable.Quote_Lines(v.Local.iCnt).AMT_Discount!FieldValString)
+			f.Intrinsic.String.Format(v.Local.fHold,"0.00",v.Local.sHold)
+			f.Intrinsic.String.LPad(v.Local.sHold," ",19,v.Local.sHold)
+			f.Intrinsic.String.Concat(v.Local.sLine,v.Local.sHold,v.Local.sLine)
+
+			f.Intrinsic.Control.If(v.Local.iCnt,=,0)
+				v.Local.sFullText.Set(v.Local.sLine)
+			f.Intrinsic.Control.Else
+				f.Intrinsic.String.Concat(v.Local.sFullText,v.Ambient.NewLine,v.Local.sLine,v.Local.sFullText)
+			f.Intrinsic.Control.EndIf
+			
+		'Endif for Valid part	
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Next(v.Local.iCnt)	
+
+'	V.Local.sReg.Declare
+'	v.Local.iCount.Declare
+'	v.Local.iWait.Declare
+'	v.Local.iWait.Set(15)
+'	v.Local.bFreeToLaunch.Declare
+'	F.Global.Registry.ReadValue(v.Local.sSupervsrID,V.Caller.CompanyCode,"QUOTEUPLOAD",5539,1001,5,"",V.local.sReg)		
+'	'Check other instance
+'	f.Intrinsic.Control.For(v.Local.iCount,1,v.Local.iWait,1)	
+'		f.Intrinsic.Control.If(v.Local.sReg.Trim,=,"")
+'			'quote upload is free to be launched
+'			v.Local.bFreeToLaunch.Set(True)			
+'			f.Intrinsic.Control.ExitFor(v.Local.iCount)
+'		f.Intrinsic.Control.EndIf
+'		f.Intrinsic.UI.Sleep(1)
+'		F.Global.Registry.ReadValue(v.Local.sSupervsrID,V.Caller.CompanyCode,"QUOTEUPLOAD",5539,1001,5,"",V.local.sReg)
+'	f.Intrinsic.Control.Next(v.Local.iCount)
+
+'	'After iWait seconds, the program still says there is other instance running, so we displays the logs to see what's happerning with the Web Importer
+'	f.Intrinsic.Control.If(v.Local.bFreeToLaunch.Not)	
+'		f.Intrinsic.Control.CallSub(Display_Log)			
+'		f.Intrinsic.UI.CloseWaitDialog
+'		f.Intrinsic.UI.Msgbox("Time out. Quote Loader is still busy.","Attention")
+'		gui.Form.picSaveQuote.Enabled(True)
+'		f.Intrinsic.Control.ExitSub			
+'	f.Intrinsic.Control.EndIf		
+	
+	
+	F.Intrinsic.String.Concat(V.Caller.FilesDir,"\QUOTE.TXT",V.Local.sFile)
+	F.Intrinsic.File.String2File(V.Local.sFile,V.Local.sFullText)		
+		
+	'Upload	
+	F.Global.General.CallWrapperSync(50,"UPLQUOTE/U")	
+	
+	'Update the fields that have not been updated
+	f.Intrinsic.Control.For(v.Local.iCnt,v.Global.iStartingLine,v.DataTable.Quote_Lines.RowCount--,1)
+	
+		'Skip the Not Valid Part
+		f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Local.iCnt).Part_Validation!fieldValTrim,=,"Valid")				
+	
+			f.Intrinsic.String.LPad(v.DataTable.Quote_Lines(v.Local.iCnt).Line!FieldValLong,"0",3,v.Local.sRecord_No)			
+			'Calculate Margin dollar amount:			
+			v.Local.sMargin.Set("0.0000")
+			f.Intrinsic.Math.Sub(v.DataTable.Quote_Lines(v.Local.iCnt).Discount_Price!FieldValFloat,v.DataTable.Quote_Lines(v.Local.iCnt).Cost!FieldValFloat,v.Local.fHold)
+			
+			'Calculate Margin percent
+			f.Intrinsic.Control.If(v.DataTable.Quote_Lines(v.Local.iCnt).Discount_Price!FieldValFloat,<>,0.00)
+				f.Intrinsic.Math.Div(v.Local.fHold,v.DataTable.Quote_Lines(v.Local.iCnt).Discount_Price!FieldValFloat,v.Local.fHold)
+				f.Intrinsic.Math.Mult(v.Local.fHold,100,v.Local.fHold)				
+				f.Intrinsic.Control.If(v.Local.fHold,>,999.00)
+					v.Local.fHold.Set(999)
+				f.Intrinsic.Control.EndIf
+				f.Intrinsic.Control.If(v.Local.fHold,<,-999.00)
+					v.Local.fHold.Set(-999)
+				f.Intrinsic.Control.EndIf
+				f.Intrinsic.String.Format(v.Local.fHold,"0.0000",v.Local.sMargin)
+				
+			f.Intrinsic.Control.EndIf
+			
+			'Flag discount or not
+			f.Intrinsic.String.Format(v.DataTable.Quote_Lines(v.Local.iCnt).Discount!FieldValFloat,"0.00",v.Local.sHold)
+			F.Intrinsic.Control.If(v.Local.sHold,=,"0.00")
+				v.Local.sFlagDiscount.Set("N")
+			f.Intrinsic.Control.Else
+				v.Local.sFlagDiscount.Set("D")
+			f.Intrinsic.Control.EndIf	
+			
+			'Reset User fields 1 to 4
+			v.Local.sUser1.Set("")
+			v.Local.sUser2.Set("")
+			v.Local.sUser3.Set("")
+			v.Local.sUser4.Set("")						
+			f.Intrinsic.Control.For(v.Local.iInner,1,4,1)
+				f.Intrinsic.String.Build("sUser{0}",v.Local.iInner,v.Local.sUser)
+				f.Intrinsic.String.Build("Select Top 1 Key_value from V_OE_User_Values where Cust = '{0}' and Part = '{1}' and Locn = '{2}' and HDR_Key = 'L{3}'",v.Global.sCustomer,v.DataTable.Quote_Lines(v.Local.iCnt).Part!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Location!FieldValString,v.Local.iInner,v.Local.sSQL)	
+				f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+				f.Intrinsic.Control.If(v.Local.sRet.Trim,<>,"")
+					f.Intrinsic.String.RPad(v.Local.sRet," ",30,v.Local.sHold)
+					v.Local.[v.Local.sUser].Set(v.Local.sHold)
+				f.Intrinsic.Control.Else
+					f.Intrinsic.String.Build("Select Top 1 Key_value from V_OE_User_Values where Part = '{0}' and Locn = '{1}' and HDR_Key = 'L{2}'",v.DataTable.Quote_Lines(v.Local.iCnt).Part!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Location!FieldValString,v.Local.iInner,v.Local.sSQL)
+					f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL,v.Local.sRet)
+					f.Intrinsic.Control.If(v.Local.sRet.Trim,<>,"")
+						f.Intrinsic.String.RPad(v.Local.sRet," ",30,v.Local.sHold)
+						v.Local.[v.Local.sUser].Set(v.Local.sHold)						
+					f.Intrinsic.Control.Else										
+						f.Intrinsic.Control.If(v.Local.iInner,=,4)
+							f.Intrinsic.String.RPad(v.Local.sRet," ",30,v.Local.sUser4)									
+							f.Data.DataTable.SetValue("Quote_Lines",v.Local.iCnt,"User_4",v.Local.sUser4)
+						f.Intrinsic.Control.Else
+							v.Local.[v.Local.sUser].Set(v.Local.s30blank)								
+						f.Intrinsic.Control.EndIf
+					f.Intrinsic.Control.EndIf							
+				f.Intrinsic.Control.EndIf					
+			f.Intrinsic.Control.Next(v.Local.iInner)	
+			
+			f.Intrinsic.Control.For(v.Local.iInner,1,4,1)
+				f.Intrinsic.String.Build("sUser{0}",v.Local.iInner,v.Local.sUser)
+				v.Local.sHold.Set(v.Local.[v.Local.sUser])
+				f.Intrinsic.Control.If(v.Local.sHold.Trim,=,"")
+
+					v.Local.bMsg.Set(True)
+					F.Intrinsic.String.Build("{0}{1}{2} Locn: {3} User Field {4}",v.Local.sMsg,v.Ambient.NewLine,v.DataTable.Quote_Lines(v.Local.iCnt).Part!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Location!FieldValString,v.Local.iInner,v.Local.sMsg)
+					
+					
+				f.Intrinsic.Control.EndIf
+			f.Intrinsic.Control.Next(v.Local.iInner)
+			
+			f.Intrinsic.String.Build("{0}-{1}",v.DataTable.Quote_Lines(v.Local.iCnt).Part!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Location!FieldValString,v.Local.sPartLoc)
+			v.Local.sInfo2.Set(v.dictionary.SurchargePartDict![v.Local.sPartLoc])
+			v.Local.sLotbin.Set(v.dictionary.LotBinDict![v.Local.sPartLoc])
+			
+			'Additional fields:
+			'Weight,Cost,Add_By_PGM,Date_Quote,Date_Item_Prom,Item_Promise_Dt,Add_By_Date,Add_By_Time,Price_LB,Price_LB_Quote
+			f.Intrinsic.String.Build("Update Quote_Lines set Discount = {0}, Price_Disc_Ord = {1}, AMT_DISC_QUOTE = {2}, AMT_DISC_ORD_QUOTE = {2}, UM_Inventory = '{3}', Margin = {4}, Commission_Type = '{5}',FLAG_ALWAYS_DISCOUNT = '{6}', User_5 = '{9}',Weight = '{10}',Cost = '{11}',Add_By_PGM = '{12}',Date_Quote = '{13}',Date_Item_Prom = '{14}',Item_Promise_Dt = '{15}',Add_By_Date = '{16}',Add_By_Time = '{17}00',Price_LB = '{18}',Price_LB_Quote = '{19}',User_1 = '{20}',User_2 = '{21}',User_3 = '{22}',User_4 = '{23}',Info_2 = '{24}',MUST_DLVR_BY_DATE = '{25}',LotBin_Flg = '{26}'  where Quote_No = '{7}' and Record_No = '{8}0'",v.DataTable.Quote_Lines(v.Local.iCnt).Discount!FieldValFloat,v.DataTable.Quote_Lines(v.Local.iCnt).Discount_Price!FieldValFloat,v.DataTable.Quote_Lines(v.Local.iCnt).Amt_Discount!FieldValFloat,v.DataTable.Quote_Lines(v.Local.iCnt).UM_QUOTE!FieldValString,v.Local.sMargin,v.Global.sCommType,v.Local.sFlagDiscount,v.Global.sQuote,v.Local.sRecord_No,v.DataTable.Quote_Lines(v.Local.iCnt).LineRef!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Weight!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Cost!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Add_By_PGM!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Date_Quote!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Date_Item_Prom!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Item_Promise_Dt!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Add_By_Date!FieldValString,v.Ambient.Now.FormatHHNNSS,v.DataTable.Quote_Lines(v.Local.iCnt).Price_LB!FieldValString,v.DataTable.Quote_Lines(v.Local.iCnt).Price_LB_Quote!FieldValString,v.Local.sUser1.PSQLFriendly,v.Local.sUser2.PSQLFriendly,v.Local.sUser3.PSQLFriendly,v.Local.sUser4.PSQLFriendly,v.Local.sInfo2.PSQLFriendly,v.DataTable.Quote_Lines(v.Local.iCnt).Date_Item_Prom!FieldValString,v.Local.sLotbin,v.Local.sSQL)
+			f.ODBC.Connection!con.Execute(v.Local.sSQL)					
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+	
+	
+	f.Intrinsic.Control.If(v.Local.bMsg)
+		f.Intrinsic.UI.Msgbox(v.Local.sMsg,"Attention")		
+	f.Intrinsic.Control.EndIf
+	f.Intrinsic.UI.CloseWaitDialog	
+	
+	
+	v.Global.bChange.Set(False)
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdSave_Click.End
+
+Program.Sub.cmdHelp_Click.Start
+f.Intrinsic.Control.Try
+	v.Local.sError.Declare
+	v.Local.sMsg.Declare
+	
+	v.Local.sMsg.Set("- Press Alt + A to add a pair of lines: 1 for the main Part, and 1 for its Surcharge.")
+	'f.Intrinsic.String.Build("{0}{1}- Cursor will be at the Part cell, type the Part number or some starting letters. If a complete Part number is entered, that Part will be selected. Otherwise, a browser will be opened with a filter preset. Tip: If you look for a Part starting with J, the auto complete will suggest, for example JXX, and it is not the one you want. In that case, just hit Delete to delete the XX, and hit Enter, the Part browser will be opened with filter preset as starting J",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	f.Intrinsic.String.Build("{0}{1}- At the Part browser, use Tab or Arrow key to move up/down. Hit any key or hit Enter twice to select the Part.",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	f.Intrinsic.String.Build("{0}{1}- When a Part is selected, the control will be returned to the Quote Lines screen and its Surcharge will also be selected and set in the next line.",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	f.Intrinsic.String.Build("{0}{1}- Use Tab key to move to Quantity/Price/Discount.",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	f.Intrinsic.String.Build("{0}{1}- If the main Part quantity is changed, its Surchage quantity will be also changed accordingly.",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	f.Intrinsic.String.Build("{0}{1}- Click Remove will remove the line, but only applied for the main Part. When the main Part is removed, its Surcharge line will also be removed.",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	f.Intrinsic.String.Build("{0}{1}- Old lines cannot be removed or modified. You have to do that by the Line standard screen.",v.Local.sMsg,v.Ambient.NewLine,v.Local.sMsg)
+	gui.Help.txtHelp.Text(v.Local.sMsg)
+	
+	gui.Help..Visible(True)
+
+f.Intrinsic.Control.Catch
+F.Intrinsic.String.Build("Project: {0}{1}Subroutine: {2}{1}Subroutine called from:{6}{1}Error Occurred: {3}{1}Description: {4}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,v.Ambient.SubroutineCalledFrom,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub("Unload")
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdHelp_Click.End
+
+Program.Sub.Help_UnLoad.Start
+gui.Help..Visible(False)
+Program.Sub.Help_UnLoad.End
+
+Program.Sub.ContractPricing_UnLoad.Start
+gui.ContractPricing..Visible(False)
+gui.Quote..Enabled(True)
+Program.Sub.ContractPricing_UnLoad.End
+
+Program.Sub.cmdContractPartPricing_Click.Start
+gui.Quote..Enabled(False)
+gui.ContractPricing..Visible(True)
+Program.Sub.cmdContractPartPricing_Click.End
+
+Program.Sub.cmdAllParts_Click.Start
+f.Intrinsic.Control.CallSub("Reset_AllParts_Filter")
+Program.Sub.cmdAllParts_Click.End
+
+Program.Sub.Reset_AllParts_Filter.Start
+F.Intrinsic.Control.BlockEvents
+F.Data.DataView.SetFilter("Parts","Parts_DTV","")
+F.Data.DataView.SetSort("Parts","Parts_DTV","Description ASC")
+F.Intrinsic.Control.UnBlockEvents
+Program.Sub.Reset_AllParts_Filter.End
+
+Program.Sub.cmdLog_Click.Start
+Program.Sub.cmdLog_Click.End
+
+Program.Sub.Comments.Start
+Program.Sub.Comments.End
